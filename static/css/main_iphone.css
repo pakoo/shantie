@@ -1,0 +1,93 @@
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+	color: #5C4C48;
+	background-color: #f5f0eb;
+	width: 320px;
+	margin: 0 auto;
+	font-family: Helvetica, Verdana;
+}
+
+.large_piece {
+    width: 320px;
+}
+
+.pet_avatar {
+    float: left;
+    margin:0 6px;
+    width: 48px;
+    height: 48px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 4px;
+}
+
+.owner_avatar {
+	float: right;
+	width: 40px;
+	height: 40px;
+	margin:0 6px;
+	margin-top:5px;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 50px;
+}
+
+#pet_gender {
+width: 15px;
+	height: 12px;
+    float: left;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin: 4px 5px 0 2px;
+	background-image:url(../images/dog_male@2x.png);
+}
+
+#pet_gender.male {
+background-image:url(../images/dog_male@2x.png);
+}
+
+#pet_gender.female {
+background-image:url(../images/dog_male@2x.png);
+}
+
+#pet_nickname {
+    display: block;
+    font-weight: bold;
+    font-size: 17px;
+    padding: 2px 0;
+    margin: 6px 0;
+}
+
+#pet_description {
+    font-size: 14px;
+    color: #C3BDB8;
+}
+
+#picture {
+    width: 320px;
+    height: 345px;
+    position: static;
+    clear: both;
+}
+
+#picture_image {
+	width: 320px;
+	height: 320px;
+	background-size: 320px 320px;
+	background-repeat: no-repeat;
+	position: absolute;
+	background-image: url(static/images/temp.jpg);
+	margin-top:10px;
+}
+
+#picture_description {
+	display: block;
+	font-size: 14px;
+	margin: 335px 10px 0px 12px;
+	position: absolute;
+}

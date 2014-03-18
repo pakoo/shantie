@@ -1,0 +1,28 @@
+{% autoescape None %}
+{% extends base.html %}
+
+{%block main%}
+<div class="container marketing">
+     <h2 class="text-center"  >
+         {{post['title']}}
+     </h2>
+     <a href="http://tieba.baidu.com/p/{{post['url']}}">原帖</a>
+
+     <div class="table-responsive">
+         <table class="table table-striped">
+             {%for r in post['content'] %}
+                 <tr>
+                     <td class="col-xs-3 col-md-2" >
+                         <p>{{r['user_name']}}</p>
+                         <p>{{u2s(r['create_time'])}}</p>
+                     </td>
+                     <td class="col-xs-9 col-md-10">
+                        {{tr(r['reply_content'])}}
+                     </td>
+                 </tr>
+             {%end%}
+             </tbody>
+         </table>
+     </div>
+</div>
+{%end%}

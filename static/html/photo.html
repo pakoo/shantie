@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>遛遛_每个人的养宠伙伴</title>
+    <link href="/static/css/pure.css" rel="stylesheet" type="text/css"/>
+    <link href="http://ios-client.qiniudn.com/main.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div class="ll-sprite ll-sprite-free"></div>
+    <div class="pure-g-r content">
+        <div class="pure-u-3-5">
+            <div id="picture_card">
+                <img id="owner_avatar" class="owner_avatar" alt="owner Avatar" src="{{photo['user_pic']}}"/>
+                <img id="pet_avatar" class="pet_avatar" alt="Pet Avatar"
+                src="{{photo['pet_pic']}}"/>
+
+              
+                <label id="pet_nickname">{{photo['pet_name']}}</label>
+                <div id="pet_gender" class="pet_gender"><img src="http://ios-client.qiniudn.com/dog_male@2x.png"></div>
+                <label id="pet_description">{{photo['pet_age']}}岁 {{photo['species_name']}}</label>
+
+                <div id="picture">
+                    <div id="picture_image" style="background-image:url({{photo['pic']}});"></div>
+                </div>
+              
+            </div>
+      </div>
+        <div id="app_info" class="pure-u-2-5">
+            <div class="pure-g-r">
+                <div class="pure-u-1">
+                    <img src="http://ios-client.qiniudn.com/01.png" width="255"/><br/>
+                  <br/><br/>
+                    <a href="http://itunes.apple.com/cn/app/id659237066">
+                  <img src="http://ios-client.qiniudn.com/download_button.png" width="220"/>                    </a><br/>
+                    <label class="light_text">下载遛遛搜索身边更多萌货！</label>
+                </div>
+                <div class="pure-u-1 qr_code_row">
+                    <img width="90" src="http://ios-client.qiniudn.com/qr.png"/>
+                  <div class="light_text">扫描下载遛遛</div>
+                </div>
+          </div>
+        </div>
+        <div class="pure-u-1 footer">
+            <a href="http://liuliu.it">
+                <img src="http://ios-client.qiniudn.com/footer_website.png" alt="Official Website"/>
+            </a>
+            |
+            <a href="http://e.weibo.com/liuliupet">
+                <img src="http://ios-client.qiniudn.com/footer_weibo.png" alt="Official Weibo"/>
+            </a>
+        </div>
+        <div class="pure-u-1 footer">
+            Copyright &copy; 2014 liulu. All Rightes Reserved. 沪ICP备 13013538号-1
+        </div>
+    </div>
+</body>
+</html>
