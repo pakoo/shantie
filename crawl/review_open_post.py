@@ -64,6 +64,7 @@ def save_post_img(post_id):
                 if e['tag'] == 'img':
                     img_key = '%s_%s'%(str(post_info['_id']),tools.random_key(1,24))
                     tools.update_web_file(e['content'],img_key)
+                    e['old_content'] = e['content']
                     e['content'] = img_key
                     need_reset = True
                     if not post_cover_img:

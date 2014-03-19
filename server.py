@@ -30,7 +30,7 @@ def get_real_reply(elements):
     print 'elements:',elements
     for e in elements:
         if e['tag'] == 'img':
-            new_e = '<img src="%s">'%tools.imgurl(e['content'])
+            new_e = '<img src="%s" class="img-responsive">'%tools.imgurl(e['content'])
         else:
             new_e = '<p>%s</p>'%e['content']
         new_elements.append(new_e)
@@ -57,7 +57,7 @@ def get_old_tieba_post_reply(url):
     tieba_url_root = "http://tieba.baidu.com/p"
     
     db_reply = con[dbname].post
-    res = db_reply.find_one({'url':url,'is_open':is_open})
+    res = db_reply.find_one({'url':url,'is_open':0})
     if res:
         db_reply.update({'url':url},{'$inc':{'click':1}})
         db_reply.update({'url':url},{'$set':{'last_click_time':int(time.time())}})
@@ -77,7 +77,7 @@ def get_old_tieba_post_reply(url):
                         reply['create_time'] = transUinxtime2Strtime(reply['create_time'])
                     reply['floor'] = fcount
                     fcount +=1
-        return res
+    return res
 
 class Post(BaseHandler):
     """
@@ -89,11 +89,14 @@ class Post(BaseHandler):
         """
         pid = int(self.get_argument('pid'))
         old_post_info=get_old_tieba_post_reply(pid)
+        print 'old_post_info:',old_post_info
         if old_post_info: 
-            self.render('old_post.html',data=reply_info,tieba=True)
+            logging.warning("%s is an old post!"%pid)
+            self.render('old_post.html',data=old_post_info,tieba=True)
         else:
+            logging.warning("%s is a new post!"%pid)
             post_info = mdb.baidu.post.find_one({'url':pid})
-            print 'postinfo:',post_info
+            #print 'postinfo:',post_info
             self.render('post.html',post=post_info,u2s =transUinxtime2Strtime,tr=get_real_reply)
 
 
@@ -115,6 +118,19 @@ class PostList(BaseHandler):
                 p['post_cover_img']=''
             post_list.append(p)
         self.render("post_list.html",posts = post_list)
+
+class OldPostList(BaseHandler):
+    """
+    老帖子列表
+    """
+    def get(self):
+        """
+        获取老帖子列表
+        """
+        page = self.get_argument('page',1)
+        count = 50
+        post_list = mdb.con.tieba.post.find({'is_open':settings.get('post_flag'),'tieba_name':'liyi'},{'url':1,'title':1,'find_time':1,'user_name':1,'click':1},limit=count,skip=count*(page-1),sort=[('find_time',-1)])
+
 
 
 class Application(tornado.web.Application):

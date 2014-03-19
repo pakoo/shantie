@@ -2,69 +2,70 @@
 {% extends base.html %}
 
 {% block title %}{{data['title']}}{% end %}
-{% block description %}{{data['title']}}{% block %}
+{% block description %}{{data['title']}}{% end %}
 
 {% block main %}
-<div class="container marketing">
-
-<!-- Main hero unit for a primary marketing message or call to action -->
-    <h1 class="text-center">{{data['title']}}</h1>
-<!-- Example row of columns -->
-
-<div class="table-responsive">
-    <table class="table table-striped">
-    <tbody>
-        {% for reply in data['content'] %}
-            <tr>
-            <td>{{reply.user_name}}</td>
-            <td class="content">{{reply['content']}}</td>
-            <td>{{reply['create_time']}}</td>
-            </tr>
-      
-        {% end %}
-
-        {% if data['user_reply'] %}
-            {% for reply in data.['user_reply'] %}
+    <div class="container marketing">
+    
+    <!-- Main hero unit for a primary marketing message or call to action -->
+        <h1 class="text-center">{{data['title']}}</h1>
+    <!-- Example row of columns -->
+    
+    <div class="table-responsive">
+        <table class="table table-striped">
+        <tbody>
+            {% for reply in data['content'] %}
                 <tr>
                 <td>{{reply['user_name']}}</td>
                 <td class="content">{{reply['content']}}</td>
                 <td>{{reply['create_time']}}</td>
                 </tr>
-      
+          
             {% end %}
-        {% end %}
-    </tbody>
+    
+            {% if data.get('user_reply') %}
+                {% for reply in data['user_reply'] %}
+                    <tr>
+                    <td>{{reply['user_name']}}</td>
+                    <td class="content">{{reply['content']}}</td>
+                    <td>{{reply['create_time']}}</td>
+                    </tr>
+          
+                {% end %}
+            {% end %}
+        </tbody>
+    
+        </table>
+    </div>
 
-    </table>
-</div>
 
-
-{% block script %}
-    <span style="display:none">
-    <center>
-    <script language="javascript" type="text/javascript" src="http://js.users.51.la/9399637.js"></script>
-    <noscript><a href="http://www.51.la/?9399637" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/9399637.asp" style="border:none" /></a>
-    </noscript>
-    </center>
-    </span>
-{% if tieba %}
-<script type="text/javascript">
-//破防盗链js
-function ImgRebuild() {
-	$(".content img").each(function(i){
-		url = this.src;
-		width = this.width;
-		height = this.height;
-		var imgid = Math.random();
-		frameid = 'frameimg' + imgid;
-		window['img'+imgid] = '<img id="img" src=\''+url+'?kilobug\' /><script>window.onload = function() { parent.document.getElementById(\''+frameid+'\').height = document.getElementById(\'img\').height+\'px\';img_width =document.getElementById(\'img\').width;if (img_width>=902) {document.getElementById(\'img\').width=\'902\';} }<'+'/script>';
-		img_r = '<iframe id="'+frameid+'" src="javascript:parent[\'img'+imgid+'\'];" frameBorder="0" height="' +height+ '" scrolling="no" width="100%"></iframe>';
-		$(this).replaceWith(img_r);
-	});
-	return '';
-}
-ImgRebuild();
-</script>
-{% end%}
+    {% block script %}
+        <span style="display:none">
+        <center>
+        <script language="javascript" type="text/javascript" src="http://js.users.51.la/9399637.js"></script>
+        <noscript><a href="http://www.51.la/?9399637" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/9399637.asp" style="border:none" /></a>
+        </noscript>
+        </center>
+        </span>
+        {% if tieba %}
+        <script type="text/javascript">
+        //破防盗链js
+        function ImgRebuild() {
+        	$(".content img").each(function(i){
+        		url = this.src;
+        		width = this.width;
+        		height = this.height;
+        		var imgid = Math.random();
+        		frameid = 'frameimg' + imgid;
+        		window['img'+imgid] = '<img id="img" src=\''+url+'?kilobug\' /><script>window.onload = function() { parent.document.getElementById(\''+frameid+'\').height = document.getElementById(\'img\').height+\'px\';img_width =document.getElementById(\'img\').width;if (img_width>=902) {document.getElementById(\'img\').width=\'902\';} }<'+'/script>';
+        		img_r = '<iframe id="'+frameid+'" src="javascript:parent[\'img'+imgid+'\'];" frameBorder="0" height="' +height+ '" scrolling="no" width="100%"></iframe>';
+        		$(this).replaceWith(img_r);
+        	});
+        	return '';
+        }
+        ImgRebuild();
+        </script>
+        {%end%}
+    {% end%}
 {% end%}
      

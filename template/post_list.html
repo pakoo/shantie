@@ -11,9 +11,11 @@
         {%for p in posts%}
            <div class="row featurette">
               <div class="col-md-5" >
+                  {%if p.get('post_cover_img')%}
                   <a href="/tieba/post?pid={{p['url']}}" target="_blank" >
                       <img class="featurette-image img-rounded" src="{{p['post_cover_img']}}-cover" height="300px">
                   </a>
+                  {%end%}
               </div>
               <div class="col-md-7">
                   <h3 class="featurette-heading">

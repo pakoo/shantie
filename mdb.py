@@ -7,16 +7,20 @@ from pymongo import MongoClient
 
 #mongodb global connection
 tieba = None
+baidu = None
 kds = None
 #redis global connection
 rcon = None
+con = None
 
 def mongo_init(db_para):
     """
     初始化mongodb """
-    global tieba,kds
+    global tieba,kds,con,baidu
     mclient = MongoClient(host = db_para['host'],port=db_para['port']) 
+    con = mclient
     tieba = mclient['tieba']
+    baidu = mclient['baidu']
     kds = mclient['kds']
 
 def redis_init(redis_para):
