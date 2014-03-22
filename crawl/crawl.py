@@ -402,12 +402,20 @@ if __name__ == "__main__":
     #html = get_html("http://tieba.baidu.com/p/2869738895")
     #print get_tieba_reply(html,'liyi','2869738895')
     
-     
-    get_tieba_post("liyi")
-    get_tieba_post("liyi")
-    get_tieba_post("liyi")
-    get_tieba_post("liyi")
-    get_tieba_post("liyi")
+    while True:
+        try:
+            get_tieba_post("liyi")
+            #get_tieba_post_img(u"姐脱")
+        except Exception,e:
+            print('\n'*9)
+            traceback.print_exc()
+            print('\n'*9)
+    
+    #get_tieba_post("liyi")
+    #get_tieba_post("liyi")
+    #get_tieba_post("liyi")
+    #get_tieba_post("liyi")
+    #get_tieba_post("liyi")
 
     #get_tieba_info()
     #get_tieba_post("jietup")
