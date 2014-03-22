@@ -16,9 +16,9 @@ gfw.set(open(os.path.join('keyword.txt')).read().split('\n'))
 
 def update_post(url,db,content=None,is_open=1):
     if is_open ==0 :
-        con[db].post.update({'url':url},{'$set':{'is_open':is_open,'find_time':time.time()}})
+        con[db].post.update({'url':url},{'$set':{'is_open':is_open,'find_time':time.time(),'last_click_time':time.time()}})
     else:
-        con[db].post.update({'url':url},{'$set':{'is_open':is_open,'find_time':time.time()}})
+        con[db].post.update({'url':url},{'$set':{'is_open':is_open,'find_time':time.time(),'last_click_time':time.time()}})
         
 """
 def kds_review():
@@ -63,6 +63,7 @@ def save_post_img(post_id):
             for e in r['reply_content']:
                 if e['tag'] == 'img':
                     img_key = '%s_%s'%(str(post_info['_id']),tools.random_key(1,24))
+                    #tools.update_web_file(e['content']+'?kilobug',img_key)
                     tools.update_web_file(e['content'],img_key)
                     e['old_content'] = e['content']
                     e['content'] = img_key
@@ -99,15 +100,19 @@ def tieba_review(dbname):
                 logging.warning(u'filter_title:%s'%filter_title.decode('utf-8'))
                 logging.warning(u'title:%s'%tiezi['title'])
                 if filter_title.decode('utf-8') != tiezi['title']:
-                    logging.warning( u'>>>>>>>>>>>>>>>>发现了一个被删除的帖子(%s)!<<<<<<<<<<<<<<<<<<<<'%post_url)
-                    update_post(url = tiezi['url'],db=dbname,is_open=-1)
+                    logging.warning( u'>>>>>>>>>>>>>>>>发现了一个被删除的帖子(%s)! 现在删除<<<<<<<<<<<<<<<<<<<<'%post_url)
+                    update_post(url = tiezi['url'],db=dbname,is_open=0)   
+                    save_post_img(tiezi['url'])
+                    #db.post.remove({'url':tiezi['url']}) 
                 else:
                     logging.error( u'>>>>>>>>>>>>>>>>发现了一个被删除的帖子(%s)!<<<<<<<<<<<<<<<<<<<<'%post_url)
                     update_post(url = tiezi['url'],db=dbname,is_open=0)   
                     save_post_img(tiezi['url'])
             else:
                 logging.info('>>>>>>>>>>>>>>>>删除了已经存在了48h的帖子%s !<<<<<<<<<<<<<<<<<<<<'%tiezi['url'])
-                db.post.remove({'url':tiezi['url']}) 
+                #db.post.remove({'url':tiezi['url']}) 
+                update_post(url = tiezi['url'],db=dbname,is_open=0)   
+                save_post_img(tiezi['url'])
                     
     #except Exception,e:
     #    traceback.print_exc() 

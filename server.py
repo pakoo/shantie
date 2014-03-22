@@ -27,7 +27,7 @@ def get_real_reply(elements):
     将字典数据转为html
     """
     new_elements = []
-    print 'elements:',elements
+    #print 'elements:',elements
     for e in elements:
         if e['tag'] == 'img':
             new_e = '<img src="%s" class="img-responsive">'%tools.imgurl(e['content'])
@@ -46,6 +46,18 @@ def get_post_abstract(post_info):
         if e['tag'] != 'img':
             text.append(e['content'])
     return ''.join(text)
+
+def get_hot_post():
+    """
+    获取最火的3个帖子
+    """
+    hots = []
+    res = mdb.baidu.post.find({'is_open':settings.get('post_flag'),'post_cover_img':{'$exists':True}},sort=[('last_click_time',-1)],limit=3,fields={'_id':False,'url':True,'post_cover_img':True,'title':True})
+    for p in res:
+        print p
+        p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
+        hots.append(p)
+    return hots
 
 def get_old_tieba_post_reply(url):
     """
@@ -89,15 +101,16 @@ class Post(BaseHandler):
         """
         pid = int(self.get_argument('pid'))
         old_post_info=get_old_tieba_post_reply(pid)
-        print 'old_post_info:',old_post_info
+        hots = get_hot_post()
         if old_post_info: 
             logging.warning("%s is an old post!"%pid)
-            self.render('old_post.html',data=old_post_info,tieba=True)
+            self.render('old_post.html',data=old_post_info,tieba=True,hots=hots)
+            mdb.tieba.post.update({'url':pid},{'$set':{'last_click_time':time.time()},'$inc':{'clikc':1}})
         else:
             logging.warning("%s is a new post!"%pid)
             post_info = mdb.baidu.post.find_one({'url':pid})
-            #print 'postinfo:',post_info
-            self.render('post.html',post=post_info,u2s =transUinxtime2Strtime,tr=get_real_reply)
+            self.render('post.html',post=post_info,u2s =transUinxtime2Strtime,tr=get_real_reply,hots=hots)
+            mdb.baidu.post.update({'url':pid},{'$set':{'last_click_time':time.time()},'$inc':{'clikc':1}})
 
 
 
@@ -108,8 +121,10 @@ class PostList(BaseHandler):
     def get(self):
         """
         """
+        page = int(self.get_argument('page',1))
+        count = 30
         post_list = []
-        res = mdb.baidu.post.find({'is_open':0},sort=[('create_time',-1)],limit=30)
+        res = mdb.baidu.post.find({'is_open':0},sort=[('find_time',-1)],skip=(page-1)*count,limit=count)
         for p in res:
             p['abstract'] = get_post_abstract(p)
             if p.get('post_cover_img'):
@@ -117,7 +132,7 @@ class PostList(BaseHandler):
             else:
                 p['post_cover_img']=''
             post_list.append(p)
-        self.render("post_list.html",posts = post_list)
+        self.render("post_list.html",posts = post_list,page = page)
 
 class OldPostList(BaseHandler):
     """
@@ -127,10 +142,22 @@ class OldPostList(BaseHandler):
         """
         获取老帖子列表
         """
-        page = self.get_argument('page',1)
+        posts=[]
+        page = int(self.get_argument('page',1))
         count = 50
-        post_list = mdb.con.tieba.post.find({'is_open':settings.get('post_flag'),'tieba_name':'liyi'},{'url':1,'title':1,'find_time':1,'user_name':1,'click':1},limit=count,skip=count*(page-1),sort=[('find_time',-1)])
+        res = mdb.tieba.post.find({'is_open':settings.get('post_flag'),'tieba_name':'liyi'},{'url':1,'title':1,'find_time':1,'user_name':1,'click':1},limit=count,skip=count*(page-1),sort=[('find_time',-1)])
+        for p in res:
+            p['find_time'] = transUinxtime2Strtime(p['find_time'])
+            posts.append(p)
+        self.render('old_post_list.html',posts=posts,page=page)
 
+class Index(BaseHandler):
+    """
+    """
+    def get(self):
+        """
+        """
+        self.redirect('/newpost')
 
 
 class Application(tornado.web.Application):
@@ -144,8 +171,10 @@ class Application(tornado.web.Application):
         self.manager_handlers = [
                 ]
         handlers = [
-            (r'/tieba/post',Post),
+            (r'/',Index),
+            (r'/post/tieba',Post),
             (r'/newpost',PostList),
+            (r'/oldpost',OldPostList),
             (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "static"}),
             (r'/uploadfile/(.*)', tornado.web.StaticFileHandler, {"path": "share"}),
         ]

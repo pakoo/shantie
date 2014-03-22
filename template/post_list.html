@@ -12,22 +12,42 @@
            <div class="row featurette">
               <div class="col-md-5" >
                   {%if p.get('post_cover_img')%}
-                  <a href="/tieba/post?pid={{p['url']}}" target="_blank" >
-                      <img class="featurette-image img-rounded" src="{{p['post_cover_img']}}-cover" height="300px">
-                  </a>
+                    <a href="/post/tieba?pid={{p['url']}}" target="_blank" >
+                        <img class="featurette-image img-rounded" src="{{p['post_cover_img']}}-cover" height="200px">
+                    </a>
                   {%end%}
               </div>
               <div class="col-md-7">
                   <h3 class="featurette-heading">
-                      <a href="/tieba/post?pid={{p['url']}}" target="_blank" >
+                      <a href="/post/tieba?pid={{p['url']}}" target="_blank" >
                           {{p['title']}}
-                      </a>
+                        </a>
                   </h3>
-                  <p class="lead">{{p['abstract']}}</p>
+                  <p class="lead" >{{p['abstract']}}</p>
               </div>
            </div>
            <hr class="featurette-divider">
         {%end%}
+
+
+        <div class="text-center" >
+            <ul class="pagination pagination-lg">
+            {%if page > 1%}
+                <li><a href="/newpost">«</a></li>
+                <li><a href="/newpost?page={{page-1}}">{{page-1}}</a></li>
+                <li class="active" ><a href="#" class="active">{{page}}</a></li>
+            {%else%}
+                <li class="active" ><a href="/newpost">{{page}}</a></li>
+            {%end%}
+            <li><a href="/newpost?page={{page+1}}">{{page+1}}</a></li>
+            <li><a href="/newpost?page={{page+2}}">{{page+2}}</a></li>
+            <li><a href="/newpost?page={{page+3}}">{{page+3}}</a></li>
+            <li><a href="/newpost?page={{page+9}}">{{page+9}}</a></li>
+            <li><a href="/newpost?page={{page+19}}">{{page+19}}</a></li>
+            <li><a href="/newpost?page={{page+99}}">{{page+99}}</a></li>
+            </ul>
+        </div>
+
      </div>
 
 {%end%}

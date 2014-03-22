@@ -12,6 +12,7 @@ from urlparse import urlparse
 import urllib
 import BeautifulSoup as bsoup
 from bs4 import BeautifulSoup as bs4,Tag
+import logging
 
 mktime=lambda dt:time.mktime(dt.utctimetuple())
 ######################db.init######################
@@ -242,9 +243,9 @@ def get_tieba_post(tieba_name='liyi'):
             }
             post_html = get_html(post_url)
             if post_html is None:
-                print ">"*150
-                print "下载帖子html失败"
-                print ">"*150
+                logging.error( ">"*150)
+                logging.error( "下载帖子html失败")
+                logging.error( ">"*150)
                 continue
             #reply_list = post_soup.findAll('div',{'class':'p_post'})
             #print 'reply_len:',len(reply_list)
@@ -253,42 +254,27 @@ def get_tieba_post(tieba_name='liyi'):
                 post_info['is_open'] = 0
                 post_info['find_time'] =int(time.time())
             else:
-                """
-                获取帖子总页数
-                page_line = post_soup.findAll('li',{'class':'l_pager pager_theme_2'})
-                if page_line:
-                    last_page = int(page_line[0].findAll('a')[-1]['href'].split('=')[-1])
-                    print 'last_page:',last_page
-                else:
-                    last_page =1
-                    print 'just one page this post'
-                """
-                post_info['content'] = get_tieba_reply(post_html,sort_name=tieba_name)
+                post_info['content'],total_page= get_tieba_reply(post_html,sort_name=tieba_name)
                 #print 'post_info:',post_info
+                logging.info('%s 帖子总共有 %s页'%(post_info['url'],total_page))
                 create_time = post_info['content'][0]['create_time'] 
                 post_info['create_time'] = create_time
                 post_info['find_time'] = time.time()
-                post_html2 = get_html(post_url+'?pn=2')
-                #下载第二页
-                if post_html2 is not None and 'closeWindow' not in post_html:
-                    next_content = get_tieba_reply(post_html2,sort_name=tieba_name,page=2)
-                    if next_content:
-                        post_info['content'].extend(next_content)
-                    post_html3 = get_html(post_url+'?pn=3')
-                    #下载第三页
-                    if post_html3 is not None and 'closeWindow' not in post_html:
-                        next_content = get_tieba_reply(post_html3,sort_name=tieba_name,page=3)
-                        if next_content:
-                            post_info['content'].extend(next_content)
-                        post_html4 = get_html(post_url+'?pn=4')
-                        #下载第四页
-                        if post_html4 is not None and 'closeWindow' not in post_html:
-                            next_content = get_tieba_reply(post_html4,sort_name=tieba_name,page=4)
+
+                page_turn = 3 if total_page > 4 else total_page -1
+                if page_turn > 0:
+                    for i in range(page_turn):
+                        page_num= i+2
+                        page_url = post_url+'?pn=%s'%page_num
+                        logging.info("开始下载第%s页 %s"%(page_num,page_url))
+                        post_html = get_html(page_url)
+                        if post_html is not None and 'closeWindow' not in post_html:
+                            next_content,total_page = get_tieba_reply(post_html,sort_name=tieba_name,page=page_num)
                             if next_content:
                                 post_info['content'].extend(next_content)
+
             #print 'post info:',post_info
             post_insert(post_info,'baidu')
-
 
     else:
         print 'get tieba mainpage html fail'
@@ -297,7 +283,9 @@ def get_tieba_reply(post_html,sort_name,page=1):
     """
     解析帖子内容
     """
-    post_soup = bs4(post_html,fromEncoding='gbk')
+    post_soup = bs4(post_html,from_encoding='gbk')
+    #获取帖子总页数
+    total_page = int(post_soup.find('li',{'class':'l_reply_num'}).find_all('span')[-1].string)
     db_name = 'tieba'
     tieba_reply = tieba.reply
     reply_list = post_soup.find_all('div',class_='l_post')
@@ -360,7 +348,7 @@ def get_tieba_reply(post_html,sort_name,page=1):
         else:
             continue
     #print 'new reply list:',new_reply_list
-    return new_reply_list
+    return new_reply_list,total_page
 
 def check_filter_title():
     post_list=tieba.post.find({'is_open':0},limit=50,skip=0,sort=[('find_time',DESCENDING)])

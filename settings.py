@@ -23,8 +23,8 @@ options = {
     'test' : {
         'mongo_database' : {'host' : 'localhost', 'port' : 27017,'maxconnections':300,},
         'redis_para' : {'host' : 'localhost', 'port' : 6379, 'db':1},
-        'tieba_img_bucket' : 'tiebaimg',
-        'tieba_img_host' : 'http://tiebaimg.qiniudn.com',
+        'tieba_img_bucket' : 'tiebaimgtest',
+        'tieba_img_host' : 'tiebaimgtest.qiniudn.com',
         'log_level':logging.DEBUG,
         'post_flag':0,
         'server_port':8000,
@@ -60,7 +60,8 @@ def get(key):
     env = tornado.options.options.env
     if env not in options:
         raise Exception("Invalid Environment (%s)" % env)
-    v = options.get(env).get(key) or default.get(key)
+    v = options.get(env).get(key) 
+    v = v if v != None else default.get(key)
     if callable(v):
         return v()
     return v

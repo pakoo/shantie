@@ -1,5 +1,6 @@
 {% autoescape None %}
 {% extends base.html %}
+{%block description%}{{post['title']}}{%end%}
 
 {%block main%}
 <div class="container marketing">
@@ -24,5 +25,20 @@
              </tbody>
          </table>
      </div>
+        
+     <div class="page-header">
+              <h3 id="grid">网友都在看</h1>
+     </div>
+
+     <div class="row">
+        {%for h in hots%}
+            <div class="col-md-4 col-xs-6">
+                <a href="/post/tieba?pid={{h['url']}}" ><img alt="{{h['title']}}"  class="img-rounded" style="width: 200px; height: 200px;" src="{{h['post_cover_img']}}">
+                    <p>{{h['title']}}</p>
+                </a>
+            </div><!-- /.col-lg-4 -->
+        {%end%}
+     </div>
 </div>
+
 {%end%}

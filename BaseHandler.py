@@ -55,7 +55,7 @@ class BaseHandler(tornado.web.RequestHandler):
         logging.info("llid:%s"%self.get_cookie('llid'))
         logging.info("api_name:%s"%self.api_name)
 
-        if  self.api_name in ['','login','liyi','newpost','tieba/post']:
+        if  self.api_name in ['','login','liyi','newpost','post/tieba','oldpost']:
             self.set_cookie('llid','')
         else:
             if llid:
