@@ -55,7 +55,6 @@ def get_hot_post():
     hots = []
     res = mdb.baidu.post.find({'is_open':settings.get('post_flag'),'post_cover_img':{'$exists':True}},sort=[('last_click_time',-1)],limit=3,fields={'_id':False,'url':True,'post_cover_img':True,'title':True})
     for p in res:
-        print p
         p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
         hots.append(p)
     return hots
@@ -160,6 +159,21 @@ class Index(BaseHandler):
         """
         self.redirect('/newpost')
 
+class OldPostUrl(BaseHandler):
+    """
+    """
+    def get(self,pid):
+        """
+        """
+        self.redirect('/post/tieba?pid=%s'%pid)
+
+class OldList(BaseHandler):
+    """
+    """
+    def get(self,pid=0):
+        """
+        """
+        self.redirect('/newpost')
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -174,6 +188,12 @@ class Application(tornado.web.Application):
         handlers = [
             (r'/',Index),
             (r'/post/tieba',Post),
+            (r'/liyi/post/([0-9]+)/?',OldPostUrl),
+            (r'/tieba/post/([0-9]+)/?',OldPostUrl),
+            (r'/liyi/([0-9]+)/?',OldList),
+            (r'/liyi/?',OldList),
+            (r'/tieba/([0-9]+)/?',OldList),
+            (r'/tieba/?',OldList),
             (r'/newpost',PostList),
             (r'/oldpost',OldPostList),
             (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "static"}),
@@ -190,7 +210,7 @@ class Application(tornado.web.Application):
         (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
         ])
 
-        self.add_handlers(r".oucena\.com", [
+        self.add_handlers(r"oucena\.com", [
         (r"/", app.weixin),
         (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
         ])

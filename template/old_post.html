@@ -2,7 +2,7 @@
 {% extends base.html %}
 
 {% block title %}{{data['title']}}{% end %}
-{% block description %}{{data['title']}}{% end %}
+{%block description%}<meta name="description" content="{{data['title']}}" >{%end%}
 
 {% block main %}
     <div class="container marketing">

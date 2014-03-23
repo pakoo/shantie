@@ -49,7 +49,7 @@ options = {
         'tieba_img_host' : 'http://tiebaimg.qiniudn.com',
         'log_level':logging.DEBUG,
         'post_flag':0,
-        'server_port':8000,
+        'server_port':80,
         #'log_level':logging.ERROR,
     },
 }

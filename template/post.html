@@ -1,6 +1,6 @@
 {% autoescape None %}
 {% extends base.html %}
-{%block description%}{{post['title']}}{%end%}
+{%block description%}<meta name="description" content="{{post['title']}}" >{%end%}
 
 {%block main%}
 <div class="container marketing">
