@@ -117,7 +117,16 @@ def tieba_review(dbname):
     #except Exception,e:
     #    traceback.print_exc() 
     #    pass
+
+def upload_close_post():
+    post = mdb.baidu.post.find({'is_open':0})
+    for p in post:
+        save_post_img(p['url'])
+
+
 if __name__ == "__main__":
+    mdb.init()
+    upload_close_post()
     #while True:
     #    try:
     #        tieba_review('tieba')
@@ -129,7 +138,7 @@ if __name__ == "__main__":
     #        print('\n'*9)
     #save_post_img(2869772495)
     #print tieba_review('tieba')
-    tieba_review('baidu')
+    #tieba_review('baidu')
     
 
     #update_post({'url':"thread_1_15_6890043__.html",'is_open':0})
