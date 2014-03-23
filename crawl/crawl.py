@@ -13,6 +13,7 @@ import urllib
 import BeautifulSoup as bsoup
 from bs4 import BeautifulSoup as bs4,Tag
 import logging
+import review_open_post
 
 mktime=lambda dt:time.mktime(dt.utctimetuple())
 ######################db.init######################
@@ -52,10 +53,12 @@ def post_insert(para,dbname=None):
     if res:
         if para['is_open'] == 0:
             print "发现了一个被删掉的帖子 %s"%para['url']
-            db.post.update({'url':url},{'$set':{'reply':para['reply'],
-                                             'is_open':para['is_open'],
-                                             'find_time':para['find_time'],
-                                             }})
+            review_open_post.update_post(url=para['url'],db=dbname,is_open=0)
+            review_open_post.save_post_img(para['url'])
+            #db.post.update({'url':url},{'$set':{'reply':para['reply'],
+            #                                 'is_open':para['is_open'],
+            #                                 'find_time':para['find_time'],
+            #                                 }})
         else:
             print "发现了一个已经存在的帖子 但没被删除 更新其内容 %s"%para['url']
             db.post.update({'url':url},{'$set':{'reply':para['reply'],

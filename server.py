@@ -12,6 +12,7 @@ from collections import Counter
 import settings
 import mdb
 import tools
+import app
 
 
 def transUinxtime2Strtime(utime,type=0):
@@ -182,8 +183,17 @@ class Application(tornado.web.Application):
         #管理员可以访问的路径
         self.manager_path=[p[0] for p in self.manager_handlers]
 
-        tornado.web.Application.__init__(self,handlers,**app_settings)
+        tornado.web.Application.__init__(self,default_host="www.404cn\.org",handlers=handlers,**app_settings)
 
+        self.add_handlers(r"www\.oucena\.com", [
+        (r"/", app.weixin),
+        (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
+        ])
+
+        self.add_handlers(r".oucena\.com", [
+        (r"/", app.weixin),
+        (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
+        ])
 
 if __name__ == '__main__':
     mdb.init()
