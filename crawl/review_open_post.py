@@ -80,8 +80,8 @@ def save_post_img(post_id):
 
 def tieba_review(dbname):
     db = con[dbname]
-    #yesterdat=time.time()-48*3600
-    yesterdat=time.time()-100
+    yesterdat=time.time()-48*3600
+    #yesterdat=time.time()-100
     old_post=db.post.find({'create_time':{'$lt':yesterdat},'is_open':1,'tieba_name':'liyi'})
     #old_post=con[dbname].post.find({'is_open':1})
     logging.info('old post amount:%s'%old_post.count())

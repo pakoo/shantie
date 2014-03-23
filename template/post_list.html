@@ -2,10 +2,13 @@
 {% extends base.html %}
 
 {%block main%}
+
     <div class="container marketing">
-        <h2 class="text-center"  >
-            被删掉的帖子
-        </h2>
+
+        <div class="jumbotron">
+              <h1>404CN-看被删掉的帖子</h1>
+                <p>你懂得</p>
+        </div>
 
         <hr class="featurette-divider">
         {%for p in posts%}
@@ -47,7 +50,7 @@
             <li><a href="/newpost?page={{page+99}}">{{page+99}}</a></li>
             </ul>
         </div>
-
+        
      </div>
 
 {%end%}
