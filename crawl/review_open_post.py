@@ -80,7 +80,7 @@ def save_post_img(post_id):
 
 def tieba_review(dbname):
     db = con[dbname]
-    yesterdat=time.time()-48*3600
+    yesterdat=time.time()-24*3600
     #yesterdat=time.time()-100
     old_post=db.post.find({'create_time':{'$lt':yesterdat},'is_open':1,'tieba_name':'liyi'})
     #old_post=con[dbname].post.find({'is_open':1})
@@ -127,15 +127,14 @@ def upload_close_post():
 if __name__ == "__main__":
     mdb.init()
     upload_close_post()
-    #while True:
-    #    try:
-    #        tieba_review('tieba')
-    #        kds_review()
-    #        time.sleep(600)
-    #    except Exception,e:
-    #        print('\n'*9)
-    #        traceback.print_exc()
-    #        print('\n'*9)
+    while True:
+        try:
+            tieba_review('baidu')
+            time.sleep(600)
+        except Exception,e:
+            print('\n'*9)
+            traceback.print_exc()
+            print('\n'*9)
     #save_post_img(2869772495)
     #print tieba_review('tieba')
     #tieba_review('baidu')
