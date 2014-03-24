@@ -84,7 +84,7 @@ img_tmp="""
 """
 
 def get_pm(place):
-    res = db.find_one({'location':place},sort=[('create_time',DESCENDING)])    
+    res = db.find_one({'location':place},sort=[('create_time',-1)])    
     if res:
         return res
 

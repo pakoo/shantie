@@ -53,7 +53,7 @@ def get_hot_post():
     获取最火的3个帖子
     """
     hots = []
-    res = mdb.baidu.post.find({'is_open':settings.get('post_flag'),'post_cover_img':{'$exists':True}},sort=[('last_click_time',-1)],limit=3,fields={'_id':False,'url':True,'post_cover_img':True,'title':True})
+    res = mdb.baidu.post.find({'is_open':settings.get('post_flag'),'post_cover_img':{'$exists':True}},sort=[('last_click_time',-1)],limit=6,fields={'_id':False,'url':True,'post_cover_img':True,'title':True})
     for p in res:
         p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
         hots.append(p)

@@ -109,7 +109,7 @@ def tieba_review(dbname):
                     update_post(url = tiezi['url'],db=dbname,is_open=0)   
                     save_post_img(tiezi['url'])
             else:
-                logging.info('>>>>>>>>>>>>>>>>删除了已经存在了48h的帖子%s !<<<<<<<<<<<<<<<<<<<<'%tiezi['url'])
+                logging.info('>>>>>>>>>>>>>>>>删除了已经存在了24h的帖子%s !<<<<<<<<<<<<<<<<<<<<'%tiezi['url'])
                 db.post.remove({'url':tiezi['url']}) 
                 #update_post(url = tiezi['url'],db=dbname,is_open=0)   
                 #save_post_img(tiezi['url'])
