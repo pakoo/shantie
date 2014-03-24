@@ -109,6 +109,9 @@ class Post(BaseHandler):
         else:
             logging.warning("%s is a new post!"%pid)
             post_info = mdb.baidu.post.find_one({'url':pid})
+            if not post_info:
+                self.redirect('/newpost')
+                return
             self.render('post.html',post=post_info,u2s =transUinxtime2Strtime,tr=get_real_reply,hots=hots)
             mdb.baidu.post.update({'url':pid},{'$set':{'last_click_time':time.time()},'$inc':{'clikc':1}})
 
