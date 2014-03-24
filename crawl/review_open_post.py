@@ -118,15 +118,9 @@ def tieba_review(dbname):
     #    traceback.print_exc() 
     #    pass
 
-def upload_close_post():
-    post = mdb.baidu.post.find({'is_open':0})
-    for p in post:
-        save_post_img(p['url'])
-
 
 if __name__ == "__main__":
     mdb.init()
-    upload_close_post()
     while True:
         try:
             tieba_review('baidu')
