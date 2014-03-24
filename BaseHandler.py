@@ -48,7 +48,7 @@ class BaseHandler(tornado.web.RequestHandler):
         """
         #self.request_monitor()
         self.yres=None
-        #logging.info('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        logging.info('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         #logging.info('request:%s'%str(self.request))
         llid  = self.get_cookie('llid','')
         self.api_name = self.request.uri.split('?')[0][1:]
