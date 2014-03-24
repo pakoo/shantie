@@ -1,6 +1,6 @@
 {% autoescape None %}
 {% extends base.html %}
-{%block description%}<meta name="description" content="{{post['title']}}" >{%end%}
+{%block description%}<meta name="description" content="{{post.get('title',u'李毅吧')}}" >{%end%}
 
 {%block main%}
 <div class="container marketing">
