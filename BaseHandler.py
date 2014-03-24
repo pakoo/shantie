@@ -52,8 +52,9 @@ class BaseHandler(tornado.web.RequestHandler):
         #logging.info('request:%s'%str(self.request))
         llid  = self.get_cookie('llid','')
         self.api_name = self.request.uri.split('?')[0][1:]
-        logging.info("llid:%s"%self.get_cookie('llid'))
-        logging.info("api_name:%s"%self.api_name)
+        logging.info("useragent:%s"%self.request.headers.get('User-Agent','no user-agent'))
+        #logging.info("llid:%s"%self.get_cookie('llid'))
+        #logging.info("api_name:%s"%self.api_name)
 
         #if  self.api_name in ['','login','liyi','newpost','post/tieba','oldpost','liyi/post','tieba','tieba/post']:
         #    self.set_cookie('llid','')
