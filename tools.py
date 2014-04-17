@@ -101,7 +101,7 @@ def imgurl(key,space=''):
     if not space:
         space = settings.get('tieba_img_host')
     pic_host = space
-    return os.path.join(pic_host,key)
+    return os.path.join(pic_host,key)+'?imageView/2/w/600/h/600/q/70/format/JPG'
 
 def random_key(key_amount,key_len=12):
     """
