@@ -33,7 +33,7 @@
      <div class="row">
         {%for h in hots%}
             <div class="col-md-4 col-xs-6">
-                <a href="/post/tieba?pid={{h['url']}}" ><img alt="{{h['title']}}"  class="img-rounded" style="width: 200px; height: 200px;" src="{{h['post_cover_img']}}-hot">
+                <a href="/post/tieba?pid={{h['url']}}" ><img alt="{{h['title']}}"  class="img-rounded" style="width: 200px; height: 200px;" src="{{h['post_cover_img']}}+'?imageView/2/w/300/h/300/q/30/format/JPG'">
                     <p>{{h['title']}}</p>
                 </a>
             </div><!-- /.col-lg-4 -->
