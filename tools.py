@@ -19,6 +19,8 @@ import pycurl
 import time
 import traceback
 import string
+from utils.chars import *
+
 
 current_path = os.path.split(os.path.realpath(__file__))[0]
 
@@ -168,6 +170,10 @@ def qiniu_img_info(key,bucket_name=''):
         bucket_name = settings.get('tieba_img_bucket') 
     ret, err = qiniu.rs.Client().stat(bucket_name, key)
     print ret
+
+def dumps(data):
+    res = json.dumps(data,cls=mdump)
+    return res
 
 
 if __name__ == '__main__':

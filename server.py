@@ -113,7 +113,31 @@ class Post(BaseHandler):
                 self.redirect('/newpost')
                 return
             self.render('post.html',post=post_info,u2s =transUinxtime2Strtime,tr=get_real_reply,hots=hots)
-            mdb.baidu.post.update({'url':pid},{'$set':{'last_click_time':time.time()},'$inc':{'clikc':1}})
+            mdb.baidu.post.update({'url':pid},{'$set':{'last_click_time':time.time()},'$inc':{'click':1}})
+
+class PostJson(BaseHandler):
+    """
+    用户
+    """
+    def get(self):
+        """
+        创建用户页面
+        """
+        post_id = is_oid(self.get_argument('post_id'))
+        #old_post_info=get_old_tieba_post_reply(pid)
+        #hots = get_hot_post()
+        #if old_post_info: 
+        #    logging.warning("%s is an old post!"%pid)
+        #    self.render('old_post.html',data=old_post_info,tieba=True,hots=hots)
+        #    mdb.tieba.post.update({'url':pid},{'$set':{'last_click_time':time.time()},'$inc':{'clikc':1}})
+        #else:
+        #logging.warning("%s is a new post!"%pid)
+        post_info = mdb.baidu.post.find_one({'_id':ObjectId(post_id)})
+        for c in post_info['content']:
+            for r in c['reply_content']:
+                if r['tag'] == 'img':
+                    r['content'] = tools.imgurl(r['content'])
+        self.finish(tools.dumps(post_info))
 
 
 
@@ -136,6 +160,26 @@ class PostList(BaseHandler):
                 p['post_cover_img']=''
             post_list.append(p)
         self.render("post_list.html",posts = post_list,page = page)
+
+class PostListJson(BaseHandler):
+    """
+    帖子列表json
+    """
+    def get(self):
+        page = int(self.get_argument('page',1))
+        count = 30
+        post_list = []
+        res = mdb.baidu.post.find({'is_open':0,'post_cover_img':{'$exists':True}},sort=[('find_time',-1)],skip=(page-1)*count,limit=count,fields={'title':True,'post_cover_img':True})
+        for p in res:
+            #p['abstract'] = get_post_abstract(p)
+            if p.get('post_cover_img'):
+                p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
+            else:
+                p['post_cover_img']=''
+            p['post_id'] = p['_id']
+            p.pop('_id')
+            post_list.append(p)
+        self.finish(tools.dumps({'post_list':post_list}))
 
 class OldPostList(BaseHandler):
     """
@@ -198,6 +242,8 @@ class Application(tornado.web.Application):
             (r'/tieba/([0-9]+)/?',OldList),
             (r'/tieba/?',OldList),
             (r'/newpost',PostList),
+            (r'/postlistjson',PostListJson),
+            (r'/postjson',PostJson),
             (r'/oldpost',OldPostList),
             (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "static"}),
             (r'/uploadfile/(.*)', tornado.web.StaticFileHandler, {"path": "share"}),

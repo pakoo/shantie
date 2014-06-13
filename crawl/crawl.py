@@ -88,107 +88,6 @@ def transtime(stime):
     else:
         return int(time.time())
     
-def get_kds_post():
-    root="http://club.pchome.net/"
-    mainurl="http://club.pchome.net/forum_1_15.html"
-    html=get_html(mainurl)
-    if html:
-        soup = BeautifulSoup(html,fromEncoding='gbk')
-        #soup = BeautifulSoup(html)
-        posts=soup.findAll('li',{'class':'i2'})
-        #print 'post:',posts
-        for p in posts:
-            p_li=p.findAll('span')
-            p_a=p.findAll('a')
-            for a in  p_li:
-                print a
-            for a in  p_a:
-                print a
-            post_info={
-            'url':p_li[1].a['href'][1:],
-            'title':smart_str(p_li[1].a['title']),
-            'reply':int(p_li[0].text),
-            'user_id':int(p_a[-1]['bm_user_id']),
-            'user_name':p_a[-1].text,
-            'create_time':transtime(p_li[3].text),
-            'find_time':time.time(),
-            'is_open':1,
-            'content':'',
-            'is_check':0,
-            'click':0,
-            }
-            print post_info
-            post_url=str(os.path.join(root,post_info['url']))
-            print 'post_url:',post_url
-            post_html=get_html(post_url)
-            if post_html is None:
-                print ">"*150
-                print "下载帖子html失败"
-                print ">"*150
-                continue
-            if 'backHome' in post_html :
-                post_info['is_open'] = 0
-                post_info['find_time'] =time.time()
-            else:
-                post_soup = BeautifulSoup(post_html,fromEncoding='gbk')
-                post_info['content'] = get_kds_post_reply(post_soup) 
-                post_info['find_time'] =post_info['create_time']
-            print 'post_info:',post_info
-            post_insert(post_info,'kds')
-
-    else:
-        print 'get kds mainpage html fail'
-
-
-def get_kds_post_reply(post_soup):
-    """
-    获取帖子的回帖
-    """
-    #post_html = get_html(url)
-    #post_soup = BeautifulSoup(post_html,fromEncoding='gbk')
-
-    #帖子封面图
-    layer = 0
-    reply_data = []
-    reply_list =post_soup.find('div',{'id':'detail-content'}) 
-    for reply in reply_list:
-        if type(reply) == type(reply_list):
-            #print '>'*90
-            #print '%s楼'%layer
-            author = reply.find('div',{'class':'author'})
-            p_time = reply.find('div',{'class':'p_time'})
-            #print 'user name:',author.a.strong.text
-            #print 'user id:',author.a['bm_user_id']
-            #print 'create_time:',p_time.text[-19:]
-            m = reply.find('div',{'class':'mc'})
-            m = m.div
-            content = m.contents
-            #print 'div:',m
-            db_text = ''
-            text_template = "%s<br>"
-            img_template = """<img src="%s"></img>"""
-            for text in content:
-                #print 'text:',text
-                if text == u'\n':
-                    continue
-                elif type(text) == type(m):
-                    if text.name == 'a' and text.img and text.img.get('onload',None):
-                        #print 'img:',text.img['src']
-                        db_text += img_template%text.img['src']
-                else:
-                    #print 'reply:',text
-                    db_text += text_template%text
-                    
-                #print "db_text:",db_text
-            reply_info = {'user_name':author.a.strong.text,
-                          'user_id':author.a['bm_user_id'],
-                          'content':db_text,
-                          'create_time':p_time.text[-19:],
-            }
-            reply_data.append(reply_info)
-            #print 'reply_info:',reply_info
-            layer +=1
-    return reply_data
                 
 def get_tieba_post(tieba_name='liyi'):
     """
@@ -332,7 +231,7 @@ def get_tieba_reply(post_html,sort_name,page=1):
                     #对图片做转存
                     if e.name == 'img':
                         #只存楼主的图
-                        if user_name == author_name:
+                        if user_name == author_name and 'bdstatic.com' not in e['src']:
                             new_e = {'tag':'img','content':e['src']}
                         else:
                             continue
