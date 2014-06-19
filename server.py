@@ -318,10 +318,6 @@ class Application(tornado.web.Application):
 
 
 
-            (r'/yo_login',YoLogin),
-            (r'/yo_newuser',YoNewUser),
-            (r'/yo_adduser',YoAddUser),
-            (r'/yo_push',YoPush),
         ]
         handlers.extend(self.manager_handlers)
         #管理员可以访问的路径
@@ -336,6 +332,10 @@ class Application(tornado.web.Application):
 
         self.add_handlers(r"oucena\.com", [
         (r"/", app.weixin),
+        (r'/yo_login',YoLogin),
+        (r'/yo_newuser',YoNewUser),
+        (r'/yo_adduser',YoAddUser),
+        (r'/yo_push',YoPush),
         (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
         ])
 
