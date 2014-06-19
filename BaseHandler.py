@@ -98,3 +98,59 @@ class BaseHandler(tornado.web.RequestHandler):
         #        self.redirect("/login")
 
 
+class YoHandler(tornado.web.RequestHandler):
+
+    def prepare(self):
+        """
+        """
+        ip = self.request.headers.get('X-Forwarded-For','')
+        self.ip = ip
+        self.api_name = self.request.uri.split('?')[0][1:]
+
+        yoid = self.get_cookie('yoid')
+        if not yoid:
+            self.finish('fuck!')
+            return 
+        else:
+            self.yoid = yoid
+
+        if self.api_name in ['yo_newuser'] :
+            return 
+
+        uinfo = mdb.yocon.user.find_one({'device_id':yoid})
+        if  not uinfo :
+            self.uid = None
+            self.senderror(u'new user,registe first',status=-1)
+            return 
+        else:
+            self.uid = str(uinfo['_id'])
+            self._id = uinfo['_id']
+            self.name = uinfo['name']
+            self.device_id = uinfo['device_id']
+
+    def sendline(self, response={}):
+        """return an api response in the proper output format with status_code == 200"""
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        #self.ret['para'] = response
+        if not response.get('status'):
+            response['status'] = 1
+        data = tools.dumps(response)
+        logging.info('==================================================')
+        logging.info('>>>>>>>response:%s'%data)
+        logging.info('==================================================\n\n')
+        self.finish(data)
+
+    def senderror(self, reason='',status=0):
+        """
+        发送报错
+        @response_status 0:请求报错
+                         -1:未注册
+        """
+        self.set_header("Content-Type", "application/text; charset=UTF-8")
+        data = {'status':status,'reason':reason}
+        encode_data = tools.dumps(data)
+        logging.error('==================================================')
+        logging.error('>>>>>>>response:%s'%data)
+        logging.error('==================================================\n\n')
+        self.finish(encode_data)
+    

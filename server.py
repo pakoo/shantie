@@ -13,6 +13,8 @@ import settings
 import mdb
 import tools
 import app
+from bson.objectid import ObjectId
+import jiguang
 
 
 def transUinxtime2Strtime(utime,type=0):
@@ -222,6 +224,72 @@ class OldList(BaseHandler):
         """
         self.redirect('/newpost')
 
+
+class YoLogin(YoHandler):
+
+    def get(self):
+        following_info = []
+        following_list = mdb.yocon.follow.find({'from':self._id})
+        for u in following_list:
+            res = mdb.yocon.user.find_one({'_id':u['to']})
+            following_info.append({'name':res['name'],'uid':u['to']})
+        self.sendline({'name':self.name,'uid':self.uid,'following_info':following_info})
+
+
+class YoNewUser(YoHandler):
+    """
+    注册用户
+    """
+    def get(self):
+        name = self.get_argument('user_name')
+        exist_name = mdb.yocon.user.find_one({'name':name})
+        exist_device = mdb.yocon.user.find_one({'device_id':self.yoid})
+        if exist_name or exist_device:
+            self.senderror(u'eixst user name',-2)
+        else:
+            uinfo = {
+                        '_id':ObjectId(),
+                        'name':name,    
+                        'device_id':self.yoid,    
+                        'register_ip':self.ip,    
+                        'create_time':time.time(),    
+                        'send_yo_count':0,    
+                        'receive_yo_count':0,    
+                        }
+            mdb.yocon.user.insert(uinfo)
+            #self.set_cookie('yoid',self.yoid)
+            self.sendline({'uid':uinfo['_id']})
+
+class YoAddUser(YoHandler):
+    """
+    添加yo好友
+    """
+    def get(self):
+        to_user_name = self.get_argument('to_user_name')
+        to_user_info =  mdb.yocon.user.find_one({'name':to_user_name})
+        if to_user_info:
+            exist = mdb.yocon.follow.find_one({'from':self._id,'to':to_user_info['_id']})
+            if not exist:
+                mdb.yocon.follow.insert({
+                    'from':self._id,
+                    'to':to_user_info['_id'],
+                    'create_time':time.time(),
+                    })
+            self.sendline({'uid':to_user_info['_id'],'user_name':to_user_name})
+        else:
+            self.senderror(u'not this user')
+
+class YoPush(YoHandler):
+    """
+    yo push
+    """
+    def get(self):
+        to_uid = self.get_argument('to_uid')
+        msg_type = self.get_argument('msg_type',1)
+        jiguang.push(self.uid,to_uid,msg_type)
+        self.sendline()
+
+
 class Application(tornado.web.Application):
     def __init__(self):
 
@@ -247,6 +315,13 @@ class Application(tornado.web.Application):
             (r'/oldpost',OldPostList),
             (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "static"}),
             (r'/uploadfile/(.*)', tornado.web.StaticFileHandler, {"path": "share"}),
+
+
+
+            (r'/yo_login',YoLogin),
+            (r'/yo_newuser',YoNewUser),
+            (r'/yo_adduser',YoAddUser),
+            (r'/yo_push',YoPush),
         ]
         handlers.extend(self.manager_handlers)
         #管理员可以访问的路径
@@ -266,6 +341,7 @@ class Application(tornado.web.Application):
 
 if __name__ == '__main__':
     mdb.init()
+    jiguang.init_pusher()
     port = settings.get('server_port')
     root = logging.getLogger()
     root.setLevel(logging.DEBUG)

@@ -12,16 +12,19 @@ kds = None
 #redis global connection
 rcon = None
 con = None
+yocon = None
+pusher = None
 
 def mongo_init(db_para):
     """
     初始化mongodb """
-    global tieba,kds,con,baidu
+    global tieba,kds,con,baidu,yocon
     mclient = MongoClient(host = db_para['host'],port=db_para['port']) 
     con = mclient
     tieba = mclient['tieba']
     baidu = mclient['baidu']
     kds = mclient['kds']
+    yocon = mclient['yo']
 
 def redis_init(redis_para):
     """
@@ -32,6 +35,7 @@ def redis_init(redis_para):
 
 def init():
     import settings
+    global pusher
     mongo_init(settings.get('mongo_database'))
     redis_init(settings.get('redis_para'))
 
