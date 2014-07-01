@@ -214,7 +214,7 @@ class FulituList(BaseHandler):
                 {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
                 {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
                 ]
-        self.finish(json.dumps(data))
+        self.finish(json.dumps({'fuli_list':data}))
 
 class Index(BaseHandler):
     """
