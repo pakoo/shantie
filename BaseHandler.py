@@ -103,13 +103,15 @@ class YoHandler(tornado.web.RequestHandler):
     def prepare(self):
         """
         """
+        print self.request
         ip = self.request.headers.get('X-Forwarded-For','')
         self.ip = ip
         self.api_name = self.request.uri.split('?')[0][1:]
 
         yoid = self.get_cookie('yoid')
+        print 'cookie:',self.cookies
         if not yoid:
-            self.finish('fuck!')
+            self.senderror('fuck')
             return 
         else:
             self.yoid = yoid
@@ -138,6 +140,7 @@ class YoHandler(tornado.web.RequestHandler):
         logging.info('==================================================')
         logging.info('>>>>>>>response:%s'%data)
         logging.info('==================================================\n\n')
+        print 'data:',data
         self.finish(data)
 
     def senderror(self, reason='',status=0):

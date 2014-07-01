@@ -15,6 +15,7 @@ import tools
 import app
 from bson.objectid import ObjectId
 import jiguang
+import json
 
 
 def transUinxtime2Strtime(utime,type=0):
@@ -200,6 +201,21 @@ class OldPostList(BaseHandler):
             posts.append(p)
         self.render('old_post_list.html',posts=posts,page=page)
 
+class FulituList(BaseHandler):
+    """
+    """
+    def get(self):
+        """
+        """
+        data = [
+                {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
+                {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
+                {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
+                {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
+                {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
+                ]
+        self.finish(json.dumps(data))
+
 class Index(BaseHandler):
     """
     """
@@ -257,7 +273,7 @@ class YoNewUser(YoHandler):
                         'receive_yo_count':0,    
                         }
             mdb.yocon.user.insert(uinfo)
-            #self.set_cookie('yoid',self.yoid)
+            #self.set_cookie('yoid','ycsb')
             self.sendline({'uid':uinfo['_id']})
 
 class YoAddUser(YoHandler):
@@ -313,6 +329,12 @@ class Application(tornado.web.Application):
             (r'/postlistjson',PostListJson),
             (r'/postjson',PostJson),
             (r'/oldpost',OldPostList),
+            (r'/fulitu',FulituList),
+
+            (r'/yo_login',YoLogin),
+            (r'/yo_newuser',YoNewUser),
+            (r'/yo_adduser',YoAddUser),
+            (r'/yo_push',YoPush),
             (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "static"}),
             (r'/uploadfile/(.*)', tornado.web.StaticFileHandler, {"path": "share"}),
 
@@ -332,10 +354,6 @@ class Application(tornado.web.Application):
 
         self.add_handlers(r"oucena\.com", [
         (r"/", app.weixin),
-        (r'/yo_login',YoLogin),
-        (r'/yo_newuser',YoNewUser),
-        (r'/yo_adduser',YoAddUser),
-        (r'/yo_push',YoPush),
         (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
         ])
 

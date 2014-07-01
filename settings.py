@@ -28,7 +28,7 @@ options = {
         'log_level':logging.DEBUG,
         'post_flag':0,
         'server_port':8000,
-        #'log_level':logging.ERROR,
+        'log_level':logging.INFO,
     },
 
     'dev' : {
