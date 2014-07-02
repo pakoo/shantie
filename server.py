@@ -207,14 +207,18 @@ class FulituList(BaseHandler):
     def get(self):
         """
         """
+        page = int(self.get_argument('page',1))
         data = [
                 {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
-                {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
-                {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
-                {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
-                {'title':u'喷血推荐！最新流出川航空姐性爱门事件，淫语内容劲爆！','pic_list':['http://tiebaimg.qiniudn.com/kj1.jpg',"http://tiebaimg.qiniudn.com/kj2.jpg","http://tiebaimg.qiniudn.com/kj3.jpg"]},
+                {'title':u'女神极限诱惑你.这身材这胸.哥快撸出血了','pic_list':['http://tiebaimg.qiniudn.com/ns1.jpg',"http://tiebaimg.qiniudn.com/ns2.jpg","http://tiebaimg.qiniudn.com/ns3.jpg"]},
+                {'title':u'碉堡了,这几位妹子在干嘛，3P？？','pic_list':['http://tiebaimg.qiniudn.com/3p1.jpg',"http://tiebaimg.qiniudn.com/3p2.jpg","http://tiebaimg.qiniudn.com/3p3.jpg"]},
+                {'title':u'最新爆出超美银行女职员与领导性爱高清视频！','pic_list':['http://tiebaimg.qiniudn.com/zy1.jpg',"http://tiebaimg.qiniudn.com/zy2.jpg","http://tiebaimg.qiniudn.com/zy3.jpg"]},
+                {'title':u'南京地铁惊现中国版，伸手对包臀美妇又抠又摸','pic_list':['http://tiebaimg.qiniudn.com/nj1.jpg',"http://tiebaimg.qiniudn.com/nj2.jpg","http://tiebaimg.qiniudn.com/nj3.jpg"]},
                 ]
-        self.finish(json.dumps({'fuli_list':data}))
+        if page > 1:
+            self.finish(json.dumps({'fuli_list':[]}))
+        else:
+            self.finish(json.dumps({'fuli_list':data}))
 
 class Index(BaseHandler):
     """
