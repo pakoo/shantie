@@ -226,7 +226,7 @@ class ApkDownload(BaseHandler):
     def get(self):
         """
         """
-        self.redirect('http://tiebaimg.qiniudn.com/fuliba.apk')
+        self.redirect('http://ostatic.qiniudn.com/fuliba.apk')
 
 class Index(BaseHandler):
     """
