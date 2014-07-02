@@ -220,6 +220,14 @@ class FulituList(BaseHandler):
         else:
             self.finish(json.dumps({'fuli_list':data}))
 
+class ApkDownload(BaseHandler):
+    """
+    """
+    def get(self):
+        """
+        """
+        self.redirect('http://tiebaimg.qiniudn.com/fuliba.apk')
+
 class Index(BaseHandler):
     """
     """
@@ -334,6 +342,7 @@ class Application(tornado.web.Application):
             (r'/postjson',PostJson),
             (r'/oldpost',OldPostList),
             (r'/fulitu',FulituList),
+            (r'/apk',ApkDownload),
 
             (r'/yo_login',YoLogin),
             (r'/yo_newuser',YoNewUser),
