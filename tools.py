@@ -20,6 +20,7 @@ import time
 import traceback
 import string
 from utils.chars import *
+import mdb
 
 
 current_path = os.path.split(os.path.realpath(__file__))[0]
@@ -180,20 +181,23 @@ def clean_post():
     清理垃圾帖子
     """
     post_list = mdb.baidu.post.find()
-    for p in post_list[:10]:
+    for p in post_list:
+	print "[url]%s==================="%p['url']
+	print "[title]%s"%p['title']
         cover_img = p.get('post_cover_img','')
         if cover_img:
             res,err = qiniu_img_info(cover_img)
             if res:
-                if res['fsize'] > 102400:
+                if res['fsize'] > 10240:
                     hash_exist = mdb.baidu.post.find_one({'cover_hash':res['hash']})
                     if not hash_exist:
                         mdb.baidu.post.update({'_id':p['_id']},{'$set':{'cover_hash':res['hash']}})
+                        print u"[clean]好帖子"
                         continue
                     else:
                         print u"[clean]删除封面已经存在的帖子"
                 else:
-                    print u"[clean]删除封面图片太大的帖子"
+                    print u"[clean]删除封面图片太小的帖子"
             else:
                 print u"[clean]删除封面图片不存在帖子"
         else:
@@ -203,6 +207,7 @@ def clean_post():
 
 if __name__ == '__main__':
     pass
+    mdb.init()
     web_url = "http://imgsrc.baidu.com/forum/w%3D580/sign=9e20b6300db30f24359aec0bf894d192/d4550f2442a7d9332d3cf922af4bd11372f00135.jpg?kilobug"
     web_url2 = "http://imgsrc.baidu.com/forum/w%3D580/sign=f9ebe23596eef01f4d1418cdd0ff99e0/4f08f01f3a292df5ad9af744be315c6035a87368.jpg?kilobug"
     #update_web_file(web_url2,'lu1')
