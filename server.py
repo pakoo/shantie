@@ -228,6 +228,14 @@ class ApkDownload(BaseHandler):
         """
         self.render('apk.html')
 
+class ApkWXDownload(BaseHandler):
+    """
+    """
+    def get(self):
+        """
+        """
+        self.render('http://ostatic.qiniudn.com/fuliba.apk')
+
 class Index(BaseHandler):
     """
     """
@@ -343,6 +351,7 @@ class Application(tornado.web.Application):
             (r'/oldpost',OldPostList),
             (r'/fulitu',FulituList),
             (r'/apk',ApkDownload),
+            (r'/down.myapp.com/apk',ApkWXDownload),
 
             (r'/yo_login',YoLogin),
             (r'/yo_newuser',YoNewUser),
