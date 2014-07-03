@@ -228,6 +228,14 @@ class ApkDownload(BaseHandler):
         """
         self.render('apk.html')
 
+class ApkDownload2(BaseHandler):
+    """
+    """
+    def get(self):
+        """
+        """
+        self.render('apk2.html')
+
 class ApkWXDownload(BaseHandler):
     """
     """
