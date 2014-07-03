@@ -100,7 +100,6 @@ class Post(BaseHandler):
     """
     def get(self):
         """
-        创建用户页面
         """
         pid = int(self.get_argument('pid'))
         old_post_info=get_old_tieba_post_reply(pid)

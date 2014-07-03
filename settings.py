@@ -23,8 +23,10 @@ options = {
     'test' : {
         'mongo_database' : {'host' : 'localhost', 'port' : 27017,'maxconnections':300,},
         'redis_para' : {'host' : 'localhost', 'port' : 6379, 'db':1},
-        'tieba_img_bucket' : 'tiebaimgtest',
-        'tieba_img_host' : 'tiebaimgtest.qiniudn.com',
+        #'tieba_img_bucket' : 'tiebaimgtest',
+        #'tieba_img_host' : 'tiebaimgtest.qiniudn.com',
+        'tieba_img_bucket' : 'tiebaimg',
+        'tieba_img_host' : 'http://tiebaimg.qiniudn.com',
         'log_level':logging.DEBUG,
         'post_flag':0,
         'server_port':8000,

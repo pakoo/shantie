@@ -169,18 +169,36 @@ def qiniu_img_info(key,bucket_name=''):
     if not bucket_name:
         bucket_name = settings.get('tieba_img_bucket') 
     ret, err = qiniu.rs.Client().stat(bucket_name, key)
-    print ret
+    return ret,err
 
 def dumps(data):
     res = json.dumps(data,cls=mdump)
     return res
+
+def clean_post():
+    """
+    清理垃圾帖子
+    """
+    post_list = mdb.baidu.post.find()
+    for p in post_list[:10]:
+        cover_img = p.get('post_cover_img','')
+        if cover_img:
+            res,err = qiniu_img_info(cover_img)
+            if res:
+                if res['fsize'] > 102400:
+                    hash_exist = mdb.baidu.post.find_one({'cover_hash':res['hash']})
+                    if not hash_exist:
+                        mdb.baidu.post.update({'_id':p['_id']},{'$set':{'cover_hash':res['hash']}})
+                        continue
+        mdb.baidu.post.remove({'_id':p['_id']})
 
 
 if __name__ == '__main__':
     pass
     web_url = "http://imgsrc.baidu.com/forum/w%3D580/sign=9e20b6300db30f24359aec0bf894d192/d4550f2442a7d9332d3cf922af4bd11372f00135.jpg?kilobug"
     web_url2 = "http://imgsrc.baidu.com/forum/w%3D580/sign=f9ebe23596eef01f4d1418cdd0ff99e0/4f08f01f3a292df5ad9af744be315c6035a87368.jpg?kilobug"
-    update_web_file(web_url,'zpc1')
-    update_web_file(web_url2,'lu1')
+    #update_web_file(web_url2,'lu1')
     #print imgurl('test2')
     #print qiniu_img_info('test2')
+    #print qiniu_img_info('537040d91d41c867b6a2a813_grjxzpwi93t475n8bs8srf7a')
+    clean_post()
