@@ -190,6 +190,14 @@ def clean_post():
                     if not hash_exist:
                         mdb.baidu.post.update({'_id':p['_id']},{'$set':{'cover_hash':res['hash']}})
                         continue
+                    else:
+                        print u"[clean]删除封面已经存在的帖子"
+                else:
+                    print u"[clean]删除封面图片太大的帖子"
+            else:
+                print u"[clean]删除封面图片不存在帖子"
+        else:
+            print u"[clean]删除没封面的帖子"
         mdb.baidu.post.remove({'_id':p['_id']})
 
 
