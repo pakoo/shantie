@@ -359,6 +359,7 @@ class Application(tornado.web.Application):
             (r'/oldpost',OldPostList),
             (r'/fulitu',FulituList),
             (r'/apk',ApkDownload),
+            (r'/apk2',ApkDownload2),
             (r'/down.myapp.com/apk',ApkWXDownload),
 
             (r'/yo_login',YoLogin),
