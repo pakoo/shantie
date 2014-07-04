@@ -223,15 +223,21 @@ def list_all(bucket, rs=None, prefix=None, limit=None):
         marker = ret.get('marker', None)
         for item in ret['items']:
             post_id = item['key'].split('_',1)[0]
-            post_info = mdb.baidu.post.find_one({'url':post_id})
-            if not post_info:
+            print 'post_id:',post_id
+            if len(post_id) < 20:
+                continue 
+            post_info = mdb.baidu.post.find_one({'_id':ObjectId(post_id)})
+            if  not post_info:
+                print '帖子已经被删了'
                 qiniu.rs.Client().delete(bucket,item['key'])
                 continue
             try:
                 print 'img info:',item
                 if item.get('fsize',0) < 10240:
-                    qiniu.rs.Client().delete(bucket,item['key'])
+                    print '删图太小的图片'
+                    #qiniu.rs.Client().delete(bucket,item['key'])
                 else:
+                    print '发现需要保存的图片'
                     img_url = "http://tiebaimg.qiniudn.com/"+item['key']
                     img_data = s.get(img_url).content 
                     f = open("%s/%s"%("share",item['key']), "wb")
