@@ -222,15 +222,18 @@ def list_all(bucket, rs=None, prefix=None, limit=None):
         ret, err = rs.list_prefix(bucket, prefix=prefix, limit=limit, marker=marker)
         marker = ret.get('marker', None)
         for item in ret['items']:
-            print 'img info:',item
-            if item.get('fsize',0) < 10240:
-                qiniu.rs.Client().delete(bucket,item['key'])
-            else:
-                img_url = "http://tiebaimg.qiniudn.com/"+item['key']
-                img_data = s.get(img_url).content 
-                f = open("%s/%s"%("share",item['key']), "wb")
-                f.write(img_data)
-                f.close()
+            try:
+                print 'img info:',item
+                if item.get('fsize',0) < 10240:
+                    qiniu.rs.Client().delete(bucket,item['key'])
+                else:
+                    img_url = "http://tiebaimg.qiniudn.com/"+item['key']
+                    img_data = s.get(img_url).content 
+                    f = open("%s/%s"%("share",item['key']), "wb")
+                    f.write(img_data)
+                    f.close()
+            except Exception,e:
+                continue
         count+=limit
     if err is not qiniu.rsf.EOF:
         # 错误处理
