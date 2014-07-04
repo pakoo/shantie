@@ -222,6 +222,11 @@ def list_all(bucket, rs=None, prefix=None, limit=None):
         ret, err = rs.list_prefix(bucket, prefix=prefix, limit=limit, marker=marker)
         marker = ret.get('marker', None)
         for item in ret['items']:
+            post_id = item['key'].split('_',1)[0]
+            post_info = mdb.baidu.post.find_one({'url':post_id})
+            if not post_info:
+                qiniu.rs.Client().delete(bucket,item['key'])
+                continue
             try:
                 print 'img info:',item
                 if item.get('fsize',0) < 10240:
