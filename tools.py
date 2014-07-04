@@ -210,6 +210,32 @@ def download_img():
     """
     pass
 
+def list_all(bucket, rs=None, prefix=None, limit=None):
+    count = 0
+    if rs is None:
+        rs = qiniu.rsf.Client()
+    marker = None
+    err = None
+    s = requests.Session()
+    #while err is None and count<10:
+    while err is None :
+        ret, err = rs.list_prefix(bucket, prefix=prefix, limit=limit, marker=marker)
+        marker = ret.get('marker', None)
+        for item in ret['items']:
+            print 'img info:',item
+            if item.get('fsize',0) < 10240:
+                qiniu.rs.Client().delete(bucket,item['key'])
+            else:
+                img_url = "http://tiebaimg.qiniudn.com/"+item['key']
+                img_data = s.get(img_url).content 
+                f = open("%s/%s"%("share",item['key']), "wb")
+                f.write(img_data)
+                f.close()
+        count+=limit
+    if err is not qiniu.rsf.EOF:
+        # 错误处理
+        pass
+    print "count:",count
 
 if __name__ == '__main__':
     pass
@@ -221,3 +247,4 @@ if __name__ == '__main__':
     #print qiniu_img_info('test2')
     #print qiniu_img_info('537040d91d41c867b6a2a813_grjxzpwi93t475n8bs8srf7a')
     #clean_post()
+    list_all('tiebaimg',limit=500)
