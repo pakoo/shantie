@@ -10,6 +10,7 @@ import settings
 import sys
 import random
 import os
+import os.path
 import logging
 #import mdb
 import json
@@ -34,6 +35,8 @@ headers = {
            }
 
 mktime=lambda dt:time.mktime(dt.utctimetuple())
+
+
 
 def get_html(url,referer ='',verbose=False,protocol='http'):
     if not url.startswith(protocol):
@@ -235,7 +238,7 @@ def list_all(bucket, rs=None, prefix=None, limit=None):
                 print 'img info:',item
                 if item.get('fsize',0) < 10240:
                     print '删图太小的图片'
-                    #qiniu.rs.Client().delete(bucket,item['key'])
+                    qiniu.rs.Client().delete(bucket,item['key'])
                 else:
                     print '发现需要保存的图片'
                     img_url = "http://tiebaimg.qiniudn.com/"+item['key']
@@ -251,6 +254,37 @@ def list_all(bucket, rs=None, prefix=None, limit=None):
         pass
     print "count:",count
 
+def list_pic():
+    s = requests.Session()
+    post_list = mdb.baidu.post.find()
+    print 'post_count:',mdb.baidu.post.count()
+    for post in post_list:
+        for r in post["content"]:
+            for c in r['reply_content']:
+                if c['tag'] == 'img':
+                    try:
+                        #item = qiniu_img_info(c['key'])
+                        #print 'img info:',item
+                        print '发现需要保存的图片'
+                        img_url = "http://tiebaimg.qiniudn.com/"+c['key']
+                        img_data = s.get(img_url).content 
+                        #root = "/data/download/tiebaimg"
+                        root = "./"
+                        folder = c["key"][-1]
+                        folder_path = os.path.join(root,folder)
+                        file_path = os.path.join(root,folder,c['key'])
+                        print 'file_path:',file_path
+                        if not os.path.exists(folder_path):
+                            os.makedirs(folder_path)
+                        f = open(file_path, "wb")
+                        f.write(img_data)
+                        f.close()
+                    except Exception,e:
+                       traceback.print_exc() 
+
+
+
+
 if __name__ == '__main__':
     pass
     mdb.init()
@@ -261,4 +295,5 @@ if __name__ == '__main__':
     #print qiniu_img_info('test2')
     #print qiniu_img_info('537040d91d41c867b6a2a813_grjxzpwi93t475n8bs8srf7a')
     #clean_post()
-    list_all('tiebaimg',limit=500)
+    #list_all('tiebaimg',limit=500)
+    list_pic()
