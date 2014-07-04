@@ -204,6 +204,12 @@ def clean_post():
             print u"[clean]删除没封面的帖子"
         mdb.baidu.post.remove({'_id':p['_id']})
 
+def download_img():
+    """
+    下载所有的图片
+    """
+    pass
+
 
 if __name__ == '__main__':
     pass
@@ -214,4 +220,4 @@ if __name__ == '__main__':
     #print imgurl('test2')
     #print qiniu_img_info('test2')
     #print qiniu_img_info('537040d91d41c867b6a2a813_grjxzpwi93t475n8bs8srf7a')
-    clean_post()
+    #clean_post()
