@@ -154,8 +154,9 @@ def get_tieba_post(tieba_name='liyi'):
             #print 'reply_len:',len(reply_list)
             #if len(reply_list) < 1 :
             if 'closeWindow' in post_html :
-                post_info['is_open'] = 0
-                post_info['find_time'] =int(time.time())
+                continue
+                #post_info['is_open'] = 0
+                #post_info['find_time'] =int(time.time())
             else:
                 post_info['content'],total_page,post_cover_img= get_tieba_reply(post_html,sort_name=tieba_name)
                 #print 'post_info:',post_info
