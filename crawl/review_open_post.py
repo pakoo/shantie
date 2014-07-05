@@ -83,16 +83,31 @@ def tieba_review(dbname):
     yesterdat=time.time()-24*3600
     #yesterdat=time.time()-100
     old_post=db.post.find({'create_time':{'$lt':yesterdat},'is_open':1,'tieba_name':'liyi'})
+    #TODO
     #old_post=con[dbname].post.find({'is_open':1})
+
     logging.info('old post amount:%s'%old_post.count())
     root = "http://tieba.baidu.com/p/"
     #try:
     for tiezi in old_post:
             post_url=os.path.join(root,str(tiezi['url']))  
             post_content_all=tools.get_html(post_url)
-            if not post_content_all:
+            cover_img = tiezi.get('post_cover_img','')
+            logging.info("cover img:%s"%cover_img)
+            if not post_content_all :
+                logging.warning("帖子下载失败!")
+                db.post.remove({'url':tiezi['url']}) 
+                continue
+
+            cover_img_info = tools.update_web_file(cover_img,str(tiezi['_id']),settings.get('photo_test_bucket'))
+            logging.info('cover_img_info:%s'%cover_img_info)
+            if cover_img_info.get('fsize',0) < 20480:
+                logging.warning("帖子封面图太小!")
+                db.post.remove({'url':tiezi['url']}) 
                 continue
             if 'closeWindow' in post_content_all :
+            #TODO
+            #if True:
                 org_title= tiezi['title'].encode('utf-8')
                 filter_title = gfw.replace(org_title)
                 print type(filter_title),len(filter_title)

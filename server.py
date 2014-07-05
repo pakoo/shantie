@@ -153,7 +153,7 @@ class PostList(BaseHandler):
         page = int(self.get_argument('page',1))
         count = 30
         post_list = []
-        res = mdb.baidu.post.find({'is_open':0},sort=[('find_time',-1)],skip=(page-1)*count,limit=count)
+        res = mdb.baidu.post.find({'is_open':settings.get('post_flag')},sort=[('find_time',-1)],skip=(page-1)*count,limit=count)
         for p in res:
             p['abstract'] = get_post_abstract(p)
             if p.get('post_cover_img'):

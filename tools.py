@@ -123,6 +123,21 @@ def random_key(key_amount,key_len=12):
         return key_list.pop()
     return key_list
 
+def save_local_img(key,data,root=''):
+    if not root:
+        root = settings.get("photo_path")
+    folder = key[-1]
+    folder_path = os.path.join(root,folder)
+    file_path = os.path.join(root,folder,key)
+    print 'file_path:',file_path
+    if os.path.exists(file_path):
+        return
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    f = open(file_path, "wb")
+    f.write(data)
+    f.close()
+
 def get_uptoken(space = 'tieba'):
     """
     获取七牛上传token
@@ -147,11 +162,12 @@ def upload_file(pic_name,name='',local="test"):
     print 'err:',err
     return ret
 
-def update_web_file(web_url,name):
+def update_web_file(web_url,name,bucket_name=''):
     """
     """
     global client,headers
-    bucket_name=settings.get('tieba_img_bucket')
+    if not bucket_name:
+        bucket_name=settings.get('tieba_img_bucket')
     uptoken = get_uptoken(bucket_name)
     extra = qiniu.io.PutExtra()
     extra.mime_type = "image/jpeg"
@@ -159,11 +175,16 @@ def update_web_file(web_url,name):
     #r = client.get(web_url,headers=headers)
     r = get_html(web_url,referer='http://tieba.baidu.com/p/2931020380')
     data = StringIO.StringIO(r)
+    #print 'file size:',data.len
+    save_local_img(name,r)
     ret, err = qiniu.io.put(uptoken,name,data,extra)
     data.close()
-    if err is not None:
+    if ret:
+        ret['fsize'] = data.len
+        return ret
+    else:
         sys.stderr.write('error: %s ' % err)
-        return
+        return err
 
 
 def qiniu_img_info(key,bucket_name=''):
@@ -269,8 +290,7 @@ def list_pic():
                         print '发现需要保存的图片'
                         img_url = "http://tiebaimg.qiniudn.com/"+c['content']
                         img_data = s.get(img_url).content 
-                        #root = "/data/download/tiebaimg"
-                        root = "./tiebaimg"
+                        root = settings.get('photo_path')
                         folder = c["content"][-1]
                         folder_path = os.path.join(root,folder)
                         file_path = os.path.join(root,folder,c['content'])
@@ -280,7 +300,7 @@ def list_pic():
                         if not os.path.exists(folder_path):
                             os.makedirs(folder_path)
                         f = open(file_path, "wb")
-                        f.write(img_data)
+                        f.write(data)
                         f.close()
                     except Exception,e:
                        traceback.print_exc() 
@@ -291,12 +311,11 @@ def list_pic():
 if __name__ == '__main__':
     pass
     mdb.init()
-    web_url = "http://imgsrc.baidu.com/forum/w%3D580/sign=9e20b6300db30f24359aec0bf894d192/d4550f2442a7d9332d3cf922af4bd11372f00135.jpg?kilobug"
-    web_url2 = "http://imgsrc.baidu.com/forum/w%3D580/sign=f9ebe23596eef01f4d1418cdd0ff99e0/4f08f01f3a292df5ad9af744be315c6035a87368.jpg?kilobug"
-    #update_web_file(web_url2,'lu1')
+    web_url = "http://imgsrc.baidu.com/forum/w%3D580%3B/sign=74af2e32b68f8c54e3d3c5270a122ff5/241f95cad1c8a78612e9a2d26509c93d71cf502f.jpg"
+    print update_web_file(web_url,'l11r30',settings.get('photo_test_bucket'))
     #print imgurl('test2')
     #print qiniu_img_info('test2')
     #print qiniu_img_info('537040d91d41c867b6a2a813_grjxzpwi93t475n8bs8srf7a')
     #clean_post()
-    #list_all('tiebaimg',limit=500)
-    list_pic()
+    #r = requests.get(web_url)
+    #save_local_img('test',r.content)
