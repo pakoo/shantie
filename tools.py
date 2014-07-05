@@ -267,16 +267,18 @@ def list_pic():
                         #print 'img info:',item
 
                         print '发现需要保存的图片'
-                        img_url = "http://tiebaimg.qiniudn.com/"+c['content']
-                        img_data = s.get(img_url).content 
-                        #root = "/data/download/tiebaimg"
-                        root = "./tiebaimg"
+                        root = "/data/download/tiebaimg"
+                        #root = "./tiebaimg"
                         folder = c["content"][-1]
                         folder_path = os.path.join(root,folder)
                         file_path = os.path.join(root,folder,c['content'])
                         print 'file_path:',file_path
                         if os.path.exists(file_path):
+                            print '>>文件已经存在'
                             continue
+                        else:
+                            img_url = "http://tiebaimg.qiniudn.com/"+c['content']
+                            img_data = s.get(img_url).content 
                         if not os.path.exists(folder_path):
                             os.makedirs(folder_path)
                         f = open(file_path, "wb")
