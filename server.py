@@ -151,7 +151,7 @@ class PostList(BaseHandler):
         """
         """
         page = int(self.get_argument('page',1))
-        count = 30
+        count = 20
         post_list = []
         res = mdb.baidu.post.find({'is_open':settings.get('post_flag')},sort=[('find_time',-1)],skip=(page-1)*count,limit=count)
         for p in res:
