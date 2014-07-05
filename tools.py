@@ -266,13 +266,15 @@ def list_pic():
                         #item = qiniu_img_info(c['key'])
                         #print 'img info:',item
                         print '发现需要保存的图片'
-                        img_url = "http://tiebaimg.qiniudn.com/"+c['key']
-                        img_data = s.get(img_url).content 
+                        #img_url = "http://tiebaimg.qiniudn.com/"+c['key']
+                        #img_data = s.get(img_url).content 
                         #root = "/data/download/tiebaimg"
-                        root = "./"
+                        root = "./tiebaimg"
                         folder = c["key"][-1]
                         folder_path = os.path.join(root,folder)
                         file_path = os.path.join(root,folder,c['key'])
+                        if os.path.exists(file_path):
+                            continue
                         print 'file_path:',file_path
                         if not os.path.exists(folder_path):
                             os.makedirs(folder_path)
