@@ -274,9 +274,9 @@ def list_pic():
                         folder = c["content"][-1]
                         folder_path = os.path.join(root,folder)
                         file_path = os.path.join(root,folder,c['content'])
+                        print 'file_path:',file_path
                         if os.path.exists(file_path):
                             continue
-                        print 'file_path:',file_path
                         if not os.path.exists(folder_path):
                             os.makedirs(folder_path)
                         f = open(file_path, "wb")
