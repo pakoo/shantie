@@ -82,9 +82,10 @@ def tieba_review(dbname):
     db = con[dbname]
     yesterdat=time.time()-24*3600
     #yesterdat=time.time()-100
-    old_post=db.post.find({'create_time':{'$lt':yesterdat},'is_open':1,'tieba_name':'liyi'})
-    #TODO
-    #old_post=con[dbname].post.find({'is_open':1})
+    if server_name.name == 'online':
+        old_post=db.post.find({'create_time':{'$lt':yesterdat},'is_open':1,'tieba_name':'liyi'})
+    else:
+        old_post=con[dbname].post.find({'is_open':1})
 
     logging.info('old post amount:%s'%old_post.count())
     root = "http://tieba.baidu.com/p/"
@@ -105,6 +106,8 @@ def tieba_review(dbname):
                 logging.warning("帖子封面图太小!")
                 db.post.remove({'url':tiezi['url']}) 
                 continue
+            else:
+                mdb.baidu.post.update({'_id':tiezi['_id']},{'$set':{'cover_hash':cover_img_info['hash']}})
             if 'closeWindow' in post_content_all :
             #TODO
             #if True:
@@ -144,9 +147,3 @@ if __name__ == "__main__":
             print('\n'*9)
             traceback.print_exc()
             print('\n'*9)
-    #save_post_img(2869772495)
-    #print tieba_review('tieba')
-    #tieba_review('baidu')
-    
-
-    #update_post({'url':"thread_1_15_6890043__.html",'is_open':0})

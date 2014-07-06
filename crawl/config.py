@@ -21,6 +21,7 @@ import StringIO
 import time
 import traceback
 import logging
+import server_name
 from utils.ansistream import ColorizingStreamHandler
 logging.StreamHandler = ColorizingStreamHandler
 mdb.init()
