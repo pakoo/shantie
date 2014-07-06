@@ -98,10 +98,10 @@ def get_tieba_post(tieba_name='liyi'):
     tieba_html = get_html(url)
     #print 'tieba_html:',tieba_html
     if tieba_html:
-        soup = BeautifulSoup(tieba_html,fromEncoding='gbk')
+        soup = bs4(tieba_html,from_encoding='gbk')
         thread_list = soup.find('ul',{'id':'thread_list'})
         #print 'thread_list:',thread_list
-        post_list = thread_list.findAll('li',{'class':'j_thread_list clearfix '})
+        post_list = thread_list.find_all('li',class_='j_thread_list clearfix ')
         print "post_list:",len(post_list)
         #print 'post:',post_list[-1]
         for p in post_list[2:]:
