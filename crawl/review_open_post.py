@@ -95,22 +95,22 @@ def tieba_review(dbname):
             post_content_all=tools.get_html(post_url)
             cover_img = tiezi.get('post_cover_img','')
             logging.info("cover img:%s"%cover_img)
-            if not post_content_all :
+            if not post_content_all or len(tiezi['content']) < 3:
                 logging.warning("帖子下载失败!")
                 db.post.remove({'url':tiezi['url']}) 
                 continue
 
-            cover_img_info = tools.update_web_file(cover_img,str(tiezi['_id']),settings.get('photo_test_bucket'))
-            logging.info('cover_img_info:%s'%cover_img_info)
-            if cover_img_info.get('fsize',0) < 20480:
-                logging.warning("帖子封面图太小!")
-                db.post.remove({'url':tiezi['url']}) 
-                continue
-            else:
-                mdb.baidu.post.update({'_id':tiezi['_id']},{'$set':{'cover_hash':cover_img_info['hash']}})
             if 'closeWindow' in post_content_all :
             #TODO
             #if True:
+                cover_img_info = tools.update_web_file(cover_img,str(tiezi['_id']),settings.get('photo_test_bucket'))
+                logging.info('cover_img_info:%s'%cover_img_info)
+                if cover_img_info.get('fsize',0) < 20480:
+                    logging.warning("帖子封面图太小!")
+                    db.post.remove({'url':tiezi['url']}) 
+                    continue
+                else:
+                    mdb.baidu.post.update({'_id':tiezi['_id']},{'$set':{'cover_hash':cover_img_info['hash']}})
                 org_title= tiezi['title'].encode('utf-8')
                 filter_title = gfw.replace(org_title)
                 print type(filter_title),len(filter_title)
