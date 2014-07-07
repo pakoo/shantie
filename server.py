@@ -267,6 +267,15 @@ class OldList(BaseHandler):
         """
         self.redirect('/newpost')
 
+class RemovePost(BaseHandler):
+    """
+    """
+    def get(self):
+        """
+        """
+        pid = int(self.get_argument("pid"))
+        mdb.baidu.post.remove({'url':pid})
+        self.finish('1')
 
 class YoLogin(YoHandler):
 
@@ -359,6 +368,7 @@ class Application(tornado.web.Application):
             (r'/fulitu',FulituList),
             (r'/apk',ApkDownload),
             (r'/apk2',ApkDownload2),
+            (r'/rp',RemovePost),
             (r'/down.myapp.com/apk',ApkWXDownload),
 
             (r'/yo_login',YoLogin),
