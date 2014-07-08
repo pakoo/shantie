@@ -105,6 +105,13 @@ def tieba_review(dbname):
             #if True:
                 cover_img_info = tools.update_web_file(cover_img,str(tiezi['_id']),settings.get('photo_test_bucket'))
                 logging.info('cover_img_info:%s'%cover_img_info)
+                if cover_img_info.get("hash",''):
+                    #判断是否有重复的封面
+                    hash_exist = mdb.baidu.post.find_one({"cover_hash":cover_img_info['hash']})
+                    if hash_exist:
+                        mdb.baidu.post.remove({"cover_hash":cover_img_info["hash"]})
+                        continue
+
                 if cover_img_info.get('fsize',0) < 20480:
                     logging.warning("帖子封面图太小!")
                     db.post.remove({'url':tiezi['url']}) 
