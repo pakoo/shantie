@@ -95,7 +95,7 @@ def tieba_review(dbname):
             post_content_all=tools.get_html(post_url)
             cover_img = tiezi.get('post_cover_img','')
             logging.info("cover img:%s"%cover_img)
-            if not post_content_all or len(tiezi['content']) < 3:
+            if not post_content_all or len(tiezi['content']) < 5:
                 logging.warning("帖子下载失败!")
                 db.post.remove({'url':tiezi['url']}) 
                 continue
