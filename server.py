@@ -243,6 +243,18 @@ class ApkWXDownload(BaseHandler):
         """
         self.render('http://ostatic.qiniudn.com/fuliba.apk')
 
+class LikePost(BaseHandler):
+    """
+    """
+    def post(self):
+        """
+        """
+        post_id = int(self.get_argument("post_id"))
+        if post_id:
+            mdb.baidu.post.update({'url':post_id},{'$set':{'last_like_time':time.time()},'$inc':{'like':1}})
+            mdb.tieba.post.update({'url':post_id},{'$set':{'last_like_time':time.time()},'$inc':{'like':1}})
+        self.finish("1")
+
 class Index(BaseHandler):
     """
     """
@@ -369,6 +381,7 @@ class Application(tornado.web.Application):
             (r'/apk',ApkDownload),
             (r'/apk2',ApkDownload2),
             (r'/rp',RemovePost),
+            (r'/likepost',LikePost),
             (r'/down.myapp.com/apk',ApkWXDownload),
 
             (r'/yo_login',YoLogin),

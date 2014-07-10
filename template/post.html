@@ -42,3 +42,26 @@
 </div>
 
 {%end%}
+{%block footer %}
+<div role="navigation" class="navbar navbar-default navbar-fixed-bottom">
+    <div >
+        <button id="recommend_button" post_id="{{post['url']}}" style="display: block; width: 100%;" type="button" class="btn btn-primary btn-lg" >推荐({{post.get('like',0)}})</button>
+    </div>
+</div>
+{%end%}
+
+{%block script%}
+<script>
+    $(document).ready(function(){
+        $("#recommend_button").click(function () {
+            var jqxhr = $.post("/likepost?post_id="+$("#recommend_button").attr("post_id"), function(data) {
+                  $("#recommend_button").attr("disabled","disabled");
+                  $("#recommend_button").text("已推荐");
+              })
+              .success(function() { })
+              .complete(function() { });
+        });
+
+})
+</script>
+{%end%}
