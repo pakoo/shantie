@@ -142,7 +142,7 @@ class PostJson(BaseHandler):
         for c in post_info['content']:
             for r in c['reply_content']:
                 if r['tag'] == 'img':
-                    r['content'] = tools.imgurl(r['content'],True)
+                    r['content'] = tools.imgurl(r['content'])
         self.finish(tools.dumps(post_info))
 
 
@@ -185,7 +185,7 @@ class PostListJson(BaseHandler):
             p['post_id'] = p['_id']
             p.pop('_id')
             post_list.append(p)
-        self.finish(tools.dumps({'post_list':post_list}),True)
+        self.finish(tools.dumps({'post_list':post_list}))
 
 class OldPostList(BaseHandler):
     """
