@@ -17,7 +17,7 @@
                          <p>{{r['user_name']}}</p>
                          <p>{{u2s(r['create_time'])}}</p>
                      </td>
-                     <td class="col-xs-9 col-md-10">
+                     <td class="col-xs-9 col-md-10 content">
                         {{tr(r['reply_content'])}}
                      </td>
                  </tr>
@@ -63,5 +63,22 @@
         });
 
 })
+</script>
+<script type="text/javascript">
+//破防盗链js
+function ImgRebuild() {
+    $(".img-responsive").each(function(i){
+        url = this.src;
+        width = this.width;
+        height = this.height;
+        var imgid = Math.random();
+        frameid = 'frameimg' + imgid;
+        window['img'+imgid] = '<img id="img" src=\''+url+'?kilobug\' /><script>window.onload = function() { parent.document.getElementById(\''+frameid+'\').height = document.getElementById(\'img\').height+\'px\';img_width =document.getElementById(\'img\').width;if (img_width>=902) {document.getElementById(\'img\').width=\'902\';} }<'+'/script>';
+        img_r = '<iframe id="'+frameid+'" src="javascript:parent[\'img'+imgid+'\'];"frameBorder="0" height="' +height+ '" scrolling="no" width="100%"></iframe>';
+        $(this).replaceWith(img_r);
+    });
+    return '';
+}
+ImgRebuild();
 </script>
 {%end%}

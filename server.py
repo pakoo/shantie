@@ -26,7 +26,7 @@ def transUinxtime2Strtime(utime,type=0):
         stime=time.strftime("%m.%d",time.localtime(utime))
         return stime
 
-def get_real_reply(elements):
+def get_real_reply(elements,use_qiniu=False):
     """
     将字典数据转为html
     """
@@ -34,7 +34,11 @@ def get_real_reply(elements):
     #print 'elements:',elements
     for e in elements:
         if e['tag'] == 'img':
-            new_e = '<img src="%s" class="img-responsive">'%tools.imgurl(e['content'])
+            #是否使用七牛的图片
+            if use_qiniu:
+                new_e = '<img src="%s" class="img-responsive">'%tools.imgurl(e['content'])
+            else:
+                new_e = '<img src="%s" class="img-responsive">'%(e['old_content']+"?kilobug")
         else:
             new_e = '<p>%s</p>'%e['content']
         new_elements.append(new_e)

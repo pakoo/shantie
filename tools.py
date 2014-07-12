@@ -315,11 +315,14 @@ def list_pic():
 if __name__ == '__main__':
     pass
     mdb.init()
-    web_url = "http://imgsrc.baidu.com/forum/w%3D580%3B/sign=74af2e32b68f8c54e3d3c5270a122ff5/241f95cad1c8a78612e9a2d26509c93d71cf502f.jpg"
-    #print update_web_file(web_url,'l12r30',settings.get('tieba_img_bucket'))
+    web_url = "http://images.cnitblog.com/blog/234895/201311/30212303-9ea9d82b964b425d8c46eea51fc3bf77.x-png"
+    #print update_web_file(web_url,'pppp1',settings.get('tieba_img_bucket'))
     #print imgurl('test2')
     #print qiniu_img_info('test2')
     #print qiniu_img_info('537040d91d41c867b6a2a813_grjxzpwi93t475n8bs8srf7a')
     #clean_post()
     #r = requests.get(web_url)
     #save_local_img('test',r.content)
+    print '--'
+    print get_uptoken(space = 'tiebaimgtest')
+    print '--'
