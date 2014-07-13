@@ -38,7 +38,7 @@ def get_real_reply(elements,use_qiniu=False):
             if use_qiniu:
                 new_e = '<img src="%s" class="img-responsive">'%tools.imgurl(e['content'])
             else:
-                new_e = '<img src="%s" class="img-responsive">'%(e['old_content']+"?kilobug")
+                new_e = '<img src="%s" class="img-responsive">'%(e.get('old_content','') or e.get('content','')+"?kilobug") 
         else:
             new_e = '<p>%s</p>'%e['content']
         new_elements.append(new_e)

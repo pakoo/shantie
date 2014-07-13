@@ -126,18 +126,14 @@ def tieba_review(dbname):
                 logging.warning(u'title:%s'%tiezi['title'])
                 if filter_title.decode('utf-8') != tiezi['title']:
                     logging.warning( u'>>>>>>>>>>>>>>>>发现了一个被删除的帖子(%s)! 现在删除<<<<<<<<<<<<<<<<<<<<'%post_url)
-                    #update_post(url = tiezi['url'],db=dbname,is_open=0)   
-                    #save_post_img(tiezi['url'])
                     db.post.remove({'url':tiezi['url']}) 
                 else:
                     logging.error( u'>>>>>>>>>>>>>>>>发现了一个被删除的帖子(%s)!<<<<<<<<<<<<<<<<<<<<'%post_url)
-                    update_post(url = tiezi['url'],db=dbname,is_open=0)   
                     save_post_img(tiezi['url'])
+                    update_post(url = tiezi['url'],db=dbname,is_open=0)   
             else:
                 logging.info('>>>>>>>>>>>>>>>>删除了已经存在了24h的帖子%s !<<<<<<<<<<<<<<<<<<<<'%tiezi['url'])
                 db.post.remove({'url':tiezi['url']}) 
-                #update_post(url = tiezi['url'],db=dbname,is_open=0)   
-                #save_post_img(tiezi['url'])
                     
     #except Exception,e:
     #    traceback.print_exc() 
