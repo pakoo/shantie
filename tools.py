@@ -318,11 +318,11 @@ if __name__ == '__main__':
     web_url = "http://images.cnitblog.com/blog/234895/201311/30212303-9ea9d82b964b425d8c46eea51fc3bf77.x-png"
     #print update_web_file(web_url,'pppp1',settings.get('tieba_img_bucket'))
     #print imgurl('test2')
-    #print qiniu_img_info('test2')
+    #print qiniu_img_info('3p1.jpg','tiebaimg')
     #print qiniu_img_info('537040d91d41c867b6a2a813_grjxzpwi93t475n8bs8srf7a')
     #clean_post()
     #r = requests.get(web_url)
     #save_local_img('test',r.content)
     print '--'
-    print get_uptoken(space = 'tiebaimgtest')
+    print get_uptoken(space = 'petimg')
     print '--'
