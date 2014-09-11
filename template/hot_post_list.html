@@ -1,0 +1,56 @@
+{% autoescape None %}
+{% extends base.html %}
+
+{%block main%}
+
+    <div class="container marketing">
+
+        <div class="jumbotron">
+              <h1>404CN-看被删掉的帖子</h1>
+                <p>你懂得</p>
+        </div>
+
+        <hr class="featurette-divider">
+        {%for p in posts%}
+           <div class="row featurette">
+              <div class="col-md-5" >
+                  {%if p.get('post_cover_img')%}
+                    <a href="/post/tieba?pid={{p['url']}}" target="_blank" >
+                        <img class="featurette-image img-rounded" src="{{p['post_cover_img']}}-cover" height="200px">
+                    </a>
+                  {%end%}
+              </div>
+              <div class="col-md-7">
+                  <h3 class="featurette-heading">
+                      <a href="/post/tieba?pid={{p['url']}}" target="_blank" >
+                          {{p['title']}}
+                        </a>
+                  </h3>
+                  <p class="lead" >{{p['abstract']}}</p>
+              </div>
+           </div>
+           <hr class="featurette-divider">
+        {%end%}
+
+
+        <div class="text-center" >
+            <ul class="pagination pagination-lg">
+            {%if page > 1%}
+                <li><a href="/hotpost">«</a></li>
+                <li><a href="/hotpost?page={{page-1}}">{{page-1}}</a></li>
+                <li class="active" ><a href="#" class="active">{{page}}</a></li>
+            {%else%}
+                <li class="active" ><a href="/hotpost">{{page}}</a></li>
+            {%end%}
+            <li><a href="/hotpost?page={{page+1}}">{{page+1}}</a></li>
+            <li><a href="/hotpost?page={{page+2}}">{{page+2}}</a></li>
+            <li><a href="/hotpost?page={{page+3}}">{{page+3}}</a></li>
+            <li><a href="/hotpost?page={{page+9}}">{{page+9}}</a></li>
+            <li><a href="/hotpost?page={{page+19}}">{{page+19}}</a></li>
+            <li><a href="/hotpost?page={{page+99}}">{{page+99}}</a></li>
+            </ul>
+        </div>
+        
+     </div>
+
+{%end%}

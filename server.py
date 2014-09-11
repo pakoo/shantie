@@ -147,6 +147,26 @@ class PostJson(BaseHandler):
 
 
 
+class HotPostList(BaseHandler):
+    """
+    帖子列表
+    """
+    def get(self):
+        """
+        """
+        page = int(self.get_argument('page',1))
+        count = 20
+        post_list = []
+        res = mdb.baidu.post.find({'is_open':settings.get('post_flag')},sort=[('last_click_time',-1)],skip=(page-1)*count,limit=count)
+        for p in res:
+            p['abstract'] = get_post_abstract(p)
+            if p.get('post_cover_img'):
+                p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
+            else:
+                p['post_cover_img']=''
+            post_list.append(p)
+        self.render("hot_post_list.html",posts = post_list,page = page)
+
 class PostList(BaseHandler):
     """
     帖子列表
@@ -175,7 +195,7 @@ class PostListJson(BaseHandler):
         page = int(self.get_argument('page',1))
         count = 30
         post_list = []
-        res = mdb.baidu.post.find({'is_open':0,'post_cover_img':{'$exists':True}},sort=[('find_time',-1)],skip=(page-1)*count,limit=count,fields={'title':True,'post_cover_img':True})
+        res = mdb.baidu.post.find({'is_open':0,'post_cover_img':{'$exists':True}},sort=[('last_click_time',-1)],skip=(page-1)*count,limit=count,fields={'title':True,'post_cover_img':True})
         for p in res:
             #p['abstract'] = get_post_abstract(p)
             if p.get('post_cover_img'):
@@ -265,7 +285,7 @@ class Index(BaseHandler):
     def get(self):
         """
         """
-        self.redirect('/newpost')
+        self.redirect('/hotpost')
 
 class OldPostUrl(BaseHandler):
     """
@@ -281,7 +301,7 @@ class OldList(BaseHandler):
     def get(self,pid=0):
         """
         """
-        self.redirect('/newpost')
+        self.redirect('/hotpost')
 
 class RemovePost(BaseHandler):
     """
@@ -291,6 +311,7 @@ class RemovePost(BaseHandler):
         """
         pid = int(self.get_argument("pid"))
         mdb.baidu.post.remove({'url':pid})
+        mdb.tieba.post.remove({'url':pid})
         self.finish('1')
 
 class YoLogin(YoHandler):
@@ -378,6 +399,7 @@ class Application(tornado.web.Application):
             (r'/tieba/([0-9]+)/?',OldList),
             (r'/tieba/?',OldList),
             (r'/newpost',PostList),
+            (r'/hotpost',HotPostList),
             (r'/postlistjson',PostListJson),
             (r'/postjson',PostJson),
             (r'/oldpost',OldPostList),
