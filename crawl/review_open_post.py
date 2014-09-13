@@ -100,7 +100,7 @@ def tieba_review(dbname):
                 db.post.remove({'url':tiezi['url']}) 
                 continue
 
-            if 'closeWindow' in post_content_all :
+            if 'error_404_iframe' in post_content_all :
             #TODO
             #if True:
                 cover_img_info = tools.update_web_file(cover_img,str(tiezi['_id']),settings.get('photo_test_bucket'))

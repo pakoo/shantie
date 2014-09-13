@@ -143,6 +143,7 @@ def get_tieba_post(tieba_name='liyi'):
             'click':0,
             'find_time':time.time(),
             'tieba_name':tieba_name,
+            'today_like_count':0,
             }
             post_html = get_html(post_url+'?see_lz=1')
             if post_html is None:
@@ -158,13 +159,14 @@ def get_tieba_post(tieba_name='liyi'):
                 #post_info['is_open'] = 0
                 #post_info['find_time'] =int(time.time())
             else:
-                post_info['content'],total_page,post_cover_img= get_tieba_reply(post_html,sort_name=tieba_name)
+                post_info['content'],total_page,post_cover_img,reply_img_list = get_tieba_reply(post_html,sort_name=tieba_name)
                 #print 'post_info:',post_info
                 print 'post_cover_img:',post_cover_img
                 logging.info('%s 帖子总共有 %s页'%(post_info['url'],total_page))
                 create_time = post_info['content'][0]['create_time'] 
                 post_info['create_time'] = create_time
                 post_info['find_time'] = time.time()
+                post_info['reply_img_list'] = reply_img_list
                 if post_cover_img:
                     post_info['post_cover_img'] = post_cover_img
                 else:
@@ -179,9 +181,11 @@ def get_tieba_post(tieba_name='liyi'):
                         logging.info("开始下载第%s页 %s"%(page_num,page_url))
                         post_html = get_html(page_url)
                         if post_html is not None and 'closeWindow' not in post_html:
-                            next_content,total_page,post_cover_img = get_tieba_reply(post_html,sort_name=tieba_name,page=page_num)
+                            next_content,total_page,post_cover_img,reply_img_list = get_tieba_reply(post_html,sort_name=tieba_name,page=page_num)
+                            post_info['reply_img_list'].extend(reply_img_list)
                             if next_content:
                                 post_info['content'].extend(next_content)
+            post_info['reply_img_count'] = len(post_info['reply_img_list'])
 
             #print 'post info:',post_info
             post_insert(post_info,'baidu')
@@ -205,6 +209,7 @@ def get_tieba_reply(post_html,sort_name,page=1):
     author_name = '' 
     #print reply_list
     new_reply_list = []
+    reply_img_list = []
     author_name = ''
     post_cover_img = ''
     for reply in reply_list:
@@ -235,7 +240,7 @@ def get_tieba_reply(post_html,sort_name,page=1):
         if elements:
             new_elements = {'reply_content':[]}
             for e in elements[:10]:
-                #print 'e:',e,type(e)
+                print 'e:',e,type(e),e.name
                 if isinstance(e,Tag):
                     #对图片做转存
                     if e.name == 'img':
@@ -243,12 +248,15 @@ def get_tieba_reply(post_html,sort_name,page=1):
                         if user_name == author_name and 'static' not in e['src']:
                             post_cover_img = e['src']
                             new_e = {'tag':'img','content':e['src']}
+                            reply_img_list.append(e['src'])
                         else:
                             continue
                     else:
-                        new_e = {'tag':e.name,'content':e.string}
+                        print 'string:',e.string,type(e.string)
+                        if e.string:
+                            new_e = {'tag':e.name,'content':e.string.strip()}
                 else:
-                    new_e = {'tag':'p','content':e.string}
+                    new_e = {'tag':'p','content':e.string.strip()}
                 if new_e['content']:
                     new_elements['reply_content'].append(new_e)
             
@@ -261,7 +269,7 @@ def get_tieba_reply(post_html,sort_name,page=1):
             continue
         floor+=1
     #print 'new reply list:',new_reply_list
-    return new_reply_list,total_page,post_cover_img
+    return new_reply_list,total_page,post_cover_img,reply_img_list
 
 def check_filter_title():
     post_list=tieba.post.find({'is_open':0},limit=50,skip=0,sort=[('find_time',DESCENDING)])
@@ -286,6 +294,22 @@ def get_tieba_info(tieba_name='liyi'):
     print '===================================================================='
 
 
+def add_reply_img():
+    """
+    增加 reply_img_count
+    """
+    posts = mdb.baidu.post.find()
+    for p in posts:
+        imgs = []
+        replys = p['content']
+        for r in replys:
+            elements = r['reply_content']
+            for e in elements:
+                if e['tag'] == 'img':
+                    res = e['content']
+                    imgs.append(res)
+        mdb.baidu.post.update({'_id':p['_id']},{'$set':{'reply_img_list':imgs,'reply_img_count':len(imgs)}})
+
 if __name__ == "__main__":
     #if sys.argv[1] == 'test':
     #    get_tieba_info()
@@ -301,10 +325,6 @@ if __name__ == "__main__":
     #    while True:
     #        try:
     #            get_tieba_post("liyi")
-    #            get_tieba_post("liyi")
-    #            get_tieba_post("liyi")
-    #            get_tieba_post("liyi")
-    #            get_tieba_post("liyi")
     #            #get_tieba_post_img(u"姐脱")
     #        except Exception,e:
     #            print('\n'*9)
@@ -315,14 +335,14 @@ if __name__ == "__main__":
     #html = get_html("http://tieba.baidu.com/p/2869738895")
     #print get_tieba_reply(html,'liyi','2869738895')
     
-    while True:
-        try:
-            get_tieba_post("liyi")
-            #get_tieba_post_img(u"姐脱")
-        except Exception,e:
-            print('\n'*9)
-            traceback.print_exc()
-            print('\n'*9)
+    #while True:
+    #    try:
+    #        get_tieba_post("liyi")
+    #        #get_tieba_post_img(u"姐脱")
+    #    except Exception,e:
+    #        print('\n'*9)
+    #        traceback.print_exc()
+    #        print('\n'*9)
     
     #get_tieba_post("liyi")
 
@@ -330,3 +350,5 @@ if __name__ == "__main__":
     #get_tieba_post("jietup")
     #get_tieba_post("liyi")
     #get_tieba_post_img("jietup")
+
+    add_reply_img()

@@ -24,6 +24,13 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+    <style type="text/css">
+      #left_banner{ 
+      position: fixed;
+      left: 0%;
+      top: 50%;
+      }
+    </style>
     {%block head%}{%end%}
   </head>
 
@@ -61,7 +68,17 @@
 
 
         <div class="row">
+            <div class="col-sm-1 col-md-2 " id="left_banner">
+                    <img src="http://404cn.org/static/img/apk.png" width="200px" height="200px" />
+                    <p><a href="/apk" >安卓版本 微信扫一扫下载</a></p>
+            </div>
+
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main main">
                 {% block main %}{%end%}
+            </div>
+
+            <div class="col-sm-2 col-md-2 ">
+            </div>
        </div>
         
         <div class="row">

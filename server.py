@@ -207,6 +207,26 @@ class PostListJson(BaseHandler):
             post_list.append(p)
         self.finish(tools.dumps({'post_list':post_list}))
 
+class HotPostListJson(BaseHandler):
+    """
+    帖子列表json
+    """
+    def get(self):
+        page = int(self.get_argument('page',1))
+        count = 30
+        post_list = []
+        res = mdb.baidu.post.find({'is_open':0,'post_cover_img':{'$exists':True}},sort=[('find_time',-1)],skip=(page-1)*count,limit=count,fields={'title':True,'post_cover_img':True})
+        for p in res:
+            #p['abstract'] = get_post_abstract(p)
+            if p.get('post_cover_img'):
+                p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
+            else:
+                p['post_cover_img']=''
+            p['post_id'] = p['_id']
+            p.pop('_id')
+            post_list.append(p)
+        self.finish(tools.dumps({'post_list':post_list}))
+
 class OldPostList(BaseHandler):
     """
     老帖子列表
@@ -314,69 +334,81 @@ class RemovePost(BaseHandler):
         mdb.tieba.post.remove({'url':pid})
         self.finish('1')
 
-class YoLogin(YoHandler):
 
-    def get(self):
-        following_info = []
-        following_list = mdb.yocon.follow.find({'from':self._id})
-        for u in following_list:
-            res = mdb.yocon.user.find_one({'_id':u['to']})
-            following_info.append({'name':res['name'],'uid':u['to']})
-        self.sendline({'name':self.name,'uid':self.uid,'following_info':following_info})
-
-
-class YoNewUser(YoHandler):
+class HotAlbumJson(BaseHandler):
     """
-    注册用户
+    获取今天推荐的相册
     """
     def get(self):
-        name = self.get_argument('user_name')
-        exist_name = mdb.yocon.user.find_one({'name':name})
-        exist_device = mdb.yocon.user.find_one({'device_id':self.yoid})
-        if exist_name or exist_device:
-            self.senderror(u'eixst user name',-2)
-        else:
-            uinfo = {
-                        '_id':ObjectId(),
-                        'name':name,    
-                        'device_id':self.yoid,    
-                        'register_ip':self.ip,    
-                        'create_time':time.time(),    
-                        'send_yo_count':0,    
-                        'receive_yo_count':0,    
-                        }
-            mdb.yocon.user.insert(uinfo)
-            #self.set_cookie('yoid','ycsb')
-            self.sendline({'uid':uinfo['_id']})
+        """
+        """
+        album_list = mdb.baidu.find({'is_open':settings.get('post_flag'),'reply_img_count':{'$gt':2}},fields={'reply_img_list':True,'title':True,'_id':False},sort=[('find_time',-1)],limit=20)
+        album_list = list(album_list)
+        self.finish(json.dumps(album_list))
+#class YoLogin(YoHandler):
+#
+#    def get(self):
+#        following_info = []
+#        following_list = mdb.yocon.follow.find({'from':self._id})
+#        for u in following_list:
+#            res = mdb.yocon.user.find_one({'_id':u['to']})
+#            following_info.append({'name':res['name'],'uid':u['to']})
+#        self.sendline({'name':self.name,'uid':self.uid,'following_info':following_info})
+#
+#
+#class YoNewUser(YoHandler):
+#    """
+#    注册用户
+#    """
+#    def get(self):
+#        name = self.get_argument('user_name')
+#        exist_name = mdb.yocon.user.find_one({'name':name})
+#        exist_device = mdb.yocon.user.find_one({'device_id':self.yoid})
+#        if exist_name or exist_device:
+#            self.senderror(u'eixst user name',-2)
+#        else:
+#            uinfo = {
+#                        '_id':ObjectId(),
+#                        'name':name,    
+#                        'device_id':self.yoid,    
+#                        'register_ip':self.ip,    
+#                        'create_time':time.time(),    
+#                        'send_yo_count':0,    
+#                        'receive_yo_count':0,    
+#                        }
+#            mdb.yocon.user.insert(uinfo)
+#            #self.set_cookie('yoid','ycsb')
+#            self.sendline({'uid':uinfo['_id']})
+#
+#class YoAddUser(YoHandler):
+#    """
+#    添加yo好友
+#    """
+#    def get(self):
+#        to_user_name = self.get_argument('to_user_name')
+#        to_user_info =  mdb.yocon.user.find_one({'name':to_user_name})
+#        if to_user_info:
+#            exist = mdb.yocon.follow.find_one({'from':self._id,'to':to_user_info['_id']})
+#            if not exist:
+#                mdb.yocon.follow.insert({
+#                    'from':self._id,
+#                    'to':to_user_info['_id'],
+#                    'create_time':time.time(),
+#                    })
+#            self.sendline({'uid':to_user_info['_id'],'user_name':to_user_name})
+#        else:
+#            self.senderror(u'not this user')
+#
+#class YoPush(YoHandler):
+#    """
+#    yo push
+#    """
+#    def get(self):
+#        to_uid = self.get_argument('to_uid')
+#        msg_type = self.get_argument('msg_type',1)
+#        jiguang.push(self.uid,to_uid,msg_type)
+#        self.sendline()
 
-class YoAddUser(YoHandler):
-    """
-    添加yo好友
-    """
-    def get(self):
-        to_user_name = self.get_argument('to_user_name')
-        to_user_info =  mdb.yocon.user.find_one({'name':to_user_name})
-        if to_user_info:
-            exist = mdb.yocon.follow.find_one({'from':self._id,'to':to_user_info['_id']})
-            if not exist:
-                mdb.yocon.follow.insert({
-                    'from':self._id,
-                    'to':to_user_info['_id'],
-                    'create_time':time.time(),
-                    })
-            self.sendline({'uid':to_user_info['_id'],'user_name':to_user_name})
-        else:
-            self.senderror(u'not this user')
-
-class YoPush(YoHandler):
-    """
-    yo push
-    """
-    def get(self):
-        to_uid = self.get_argument('to_uid')
-        msg_type = self.get_argument('msg_type',1)
-        jiguang.push(self.uid,to_uid,msg_type)
-        self.sendline()
 
 
 class Application(tornado.web.Application):
@@ -401,7 +433,9 @@ class Application(tornado.web.Application):
             (r'/newpost',PostList),
             (r'/hotpost',HotPostList),
             (r'/postlistjson',PostListJson),
+            (r'/hotpostlistjson',HotPostListJson),
             (r'/postjson',PostJson),
+            (r'/hotalbumjson',HotAlbumJson),
             (r'/oldpost',OldPostList),
             (r'/fulitu',FulituList),
             (r'/apk',ApkDownload),
@@ -410,12 +444,13 @@ class Application(tornado.web.Application):
             (r'/likepost',LikePost),
             (r'/down.myapp.com/apk',ApkWXDownload),
 
-            (r'/yo_login',YoLogin),
-            (r'/yo_newuser',YoNewUser),
-            (r'/yo_adduser',YoAddUser),
-            (r'/yo_push',YoPush),
+            #(r'/yo_login',YoLogin),
+            #(r'/yo_newuser',YoNewUser),
+            #(r'/yo_adduser',YoAddUser),
+            #(r'/yo_push',YoPush),
+
             (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "static"}),
-            (r'/uploadfile/(.*)', tornado.web.StaticFileHandler, {"path": "share"}),
+            #(r'/uploadfile/(.*)', tornado.web.StaticFileHandler, {"path": "share"}),
 
 
 
