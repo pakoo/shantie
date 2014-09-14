@@ -287,7 +287,7 @@ class ApkWXDownload(BaseHandler):
     def get(self):
         """
         """
-        self.render('http://ostatic.qiniudn.com/fuliba1.2.apk')
+        self.render('http://ostatic.qiniudn.com/fuliba1.0.3.apk')
 
 class LikePost(BaseHandler):
     """
