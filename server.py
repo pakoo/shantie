@@ -36,7 +36,7 @@ def get_real_reply(elements,use_qiniu=False):
         if e['tag'] == 'img':
             #是否使用七牛的图片
             if use_qiniu:
-                new_e = '<img src="%s" class="img-responsive">'%tools.imgurl(e['content'])
+                new_e = '<img src="%s" class="img-responsive">'%tools.imgurl(e['content'],pformat='?post')
             else:
                 new_e = '<img src="%s" class="img-responsive">'%(e.get('old_content','') or e.get('content','')+"?kilobug") 
         else:
@@ -62,7 +62,7 @@ def get_hot_post():
     hots = []
     res = mdb.baidu.post.find({'is_open':settings.get('post_flag'),'post_cover_img':{'$exists':True}},sort=[('last_click_time',-1)],limit=6,fields={'_id':False,'url':True,'post_cover_img':True,'title':True})
     for p in res:
-        p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
+        p['post_cover_img'] = tools.imgurl(p['post_cover_img'],pformat='-cover300')
         hots.append(p)
     return hots
 
@@ -142,7 +142,7 @@ class PostJson(BaseHandler):
         for c in post_info['content']:
             for r in c['reply_content']:
                 if r['tag'] == 'img':
-                    r['content'] = tools.imgurl(r['content'])
+                    r['content'] = tools.imgurl(r['content'],pformat='-post')
         self.finish(tools.dumps(post_info))
 
 
@@ -161,7 +161,7 @@ class HotPostList(BaseHandler):
         for p in res:
             p['abstract'] = get_post_abstract(p)
             if p.get('post_cover_img'):
-                p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
+                p['post_cover_img'] = tools.imgurl2(p['post_cover_img'],pformat='-cover300')
             else:
                 p['post_cover_img']=''
             post_list.append(p)
@@ -181,7 +181,7 @@ class PostList(BaseHandler):
         for p in res:
             p['abstract'] = get_post_abstract(p)
             if p.get('post_cover_img'):
-                p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
+                p['post_cover_img'] = tools.imgurl(p['post_cover_img'],pformat='-cover300')
             else:
                 p['post_cover_img']=''
             post_list.append(p)
@@ -199,7 +199,7 @@ class PostListJson(BaseHandler):
         for p in res:
             #p['abstract'] = get_post_abstract(p)
             if p.get('post_cover_img'):
-                p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
+                p['post_cover_img'] = tools.imgurl(p['post_cover_img'],pformat='-cover300')
             else:
                 p['post_cover_img']=''
             p['post_id'] = p['_id']
@@ -219,7 +219,7 @@ class HotPostListJson(BaseHandler):
         for p in res:
             #p['abstract'] = get_post_abstract(p)
             if p.get('post_cover_img'):
-                p['post_cover_img'] = tools.imgurl(p['post_cover_img'])
+                p['post_cover_img'] = tools.imgurl(p['post_cover_img'],pformat='-cover300')
             else:
                 p['post_cover_img']=''
             p['post_id'] = p['_id']
@@ -285,7 +285,7 @@ class ApkWXDownload(BaseHandler):
     def get(self):
         """
         """
-        self.render('http://ostatic.qiniudn.com/fuliba.apk')
+        self.render('http://ostatic.qiniudn.com/fuliba1.2.apk')
 
 class LikePost(BaseHandler):
     """
@@ -342,9 +342,19 @@ class HotAlbumJson(BaseHandler):
     def get(self):
         """
         """
-        album_list = mdb.baidu.find({'is_open':settings.get('post_flag'),'reply_img_count':{'$gt':2}},fields={'reply_img_list':True,'title':True,'_id':False},sort=[('find_time',-1)],limit=20)
+        page = int(self.get_argument('page',1))
+        album_list = mdb.baidu.post.find({'is_open':settings.get('post_flag'),'reply_img_count':{'$gt':2}},fields={'reply_img_list':True,'title':True,'_id':False},sort=[('find_time',-1)],skip=20*(page-1),limit=20)
         album_list = list(album_list)
-        self.finish(json.dumps(album_list))
+        for idx,album in enumerate(album_list):
+            pics = []
+            for pic in album['reply_img_list']:
+                pic = tools.imgurl(pic,pformat='-cover300') 
+                #pic = tools.imgurl(pic) 
+                pics.append(pic)
+            album_list[idx]['pic_list'] = pics
+            album_list[idx].pop('reply_img_list')
+
+        self.finish(json.dumps({'fuli_list':album_list}))
 #class YoLogin(YoHandler):
 #
 #    def get(self):

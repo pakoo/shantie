@@ -103,11 +103,17 @@ def get_html(url):
     return html
 """
 
-def imgurl(key,space=''):
+def imgurl(key,space='',pformat=''):
     if not space:
         space = settings.get('tieba_img_host')
     pic_host = space
-    return os.path.join(pic_host,key)+'?imageView/2/w/300/h/300/q/30/format/JPG'
+    return os.path.join(pic_host,key)+pformat
+
+def imgurl2(key,space='',pformat=''):
+    if not space:
+        space = settings.get('tieba_img_host')
+    pic_host = space
+    return os.path.join(pic_host,key)+pformat
 
 def random_key(key_amount,key_len=12):
     """
