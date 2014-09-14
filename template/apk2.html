@@ -1,19 +1,112 @@
-{% autoescape None %}
-{% extends base.html %}
-{%block description%}<meta name="description" content="福利吧 安卓版 apk 下载" >{%end%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {%block description%}{%end%}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="福利吧 安卓版 apk 下载" >
+    <link rel="shortcut icon" href="/static/img/favicon.png">
 
-{%block main%}
-<div class="container marketing">
-     <h2 class="text-center"  >
-        在微信内下载请先点击右上角按钮菜单内的"在浏览器中打开".如下图,然后再点击最下面的"下载"按钮
-     </h2>
-     <div class="row text-center">
-        <img with="300px" height="500px" src="/static/img/wxcd.jpg" />
-     </div>
+    <title>404cn-看被删掉的帖子</title>
 
-        <div class="row text-center">
-            <a href="http://ostatic.qiniudn.com/fuliba{{version}}.apk">
-                 <button type="button" width="400px" class="btn btn-info btn-lg">下载</button>
-            </a>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/hotpost">404cn</a>
+          <a class="navbar-brand" href="/hotpost">最热贴</a>
+          <a class="navbar-brand" href="/newpost">最新贴</a>
         </div>
-{%end%}
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"></a></li>
+            <li><a href="#"></a></li>
+          </ul>
+          {%block search_bar %}
+          {% end %}
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+
+
+        <div class="row">
+            <div class="container marketing">
+                <h2 class="text-center"  >
+                    在微信内下载请先点击右上角按钮菜单内的"在浏览器中打开".如下图,然后再点击最下面的"下载"按钮
+                </h2>
+
+                <div class="row text-center">
+                    <img with="300px" height="500px" src="/static/img/wxcd.jpg" />
+                </div>
+                <div class="row text-center">
+                    <a href="http://ostatic.qiniudn.com/fuliba{{version}}.apk">
+                <button type="button" width="400px" class="btn btn-info btn-lg">下载</button>
+                </a>
+                </div>
+            </div>
+
+       </div>
+        
+        <div class="row">
+                {% block footer %}{%end%}
+       </div>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/holder.js"></script>
+    {%block script%}{%end%}
+    <div style="display:none">
+        <script language="javascript" type="text/javascript" src="http://js.users.51.la/9399637.js"></script>
+        <noscript ><a href="http://www.51.la/?9399637" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/9399637.asp" ></a>
+        </noscript>
+    </div>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      var pluginUrl =  '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+      _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+      _gaq.push(['_setAccount', 'UA-33701837-1']);
+      _gaq.push(['_setDomainName', '']);
+      _gaq.push(['_trackPageview']);
+    
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    
+    String.prototype.replaceAll  = function(s1,s2){
+        return this.replace(new RegExp(s1,"gm"),s2);
+    }
+    </script>
+  </body>
+</html>
