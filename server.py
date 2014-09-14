@@ -111,7 +111,7 @@ class Post(BaseHandler):
         if old_post_info: 
             logging.warning("%s is an old post!"%pid)
             self.render('old_post.html',data=old_post_info,tieba=True,hots=hots)
-            mdb.tieba.post.update({'url':pid},{'$set':{'last_click_time':time.time()},'$inc':{'clikc':1}})
+            mdb.tieba.post.update({'url':pid},{'$set':{'last_click_time':time.time()},'$inc':{'click':1}})
         else:
             logging.warning("%s is a new post!"%pid)
             post_info = mdb.baidu.post.find_one({'url':pid})
@@ -135,7 +135,7 @@ class PostJson(BaseHandler):
         #if old_post_info: 
         #    logging.warning("%s is an old post!"%pid)
         #    self.render('old_post.html',data=old_post_info,tieba=True,hots=hots)
-        #    mdb.tieba.post.update({'url':pid},{'$set':{'last_click_time':time.time()},'$inc':{'clikc':1}})
+        #    mdb.tieba.post.update({'url':pid},{'$set':{'last_click_time':time.time()},'$inc':{'click':1}})
         #else:
         #logging.warning("%s is a new post!"%pid)
         post_info = mdb.baidu.post.find_one({'_id':ObjectId(post_id)})
@@ -144,6 +144,8 @@ class PostJson(BaseHandler):
                 if r['tag'] == 'img':
                     r['content'] = tools.imgurl(r['content'],pformat='-post')
         self.finish(tools.dumps(post_info))
+        mdb.baidu.update({'_id':ObjectId(post_id)},{'$set':{'last_click_time':time.time()},'$inc':{'click':1}})
+
 
 
 

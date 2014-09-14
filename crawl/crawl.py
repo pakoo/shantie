@@ -240,7 +240,7 @@ def get_tieba_reply(post_html,sort_name,page=1):
         if elements:
             new_elements = {'reply_content':[]}
             for e in elements[:10]:
-                print 'e:',e,type(e),e.name
+                #print 'e:',e,type(e),e.name
                 if isinstance(e,Tag):
                     #对图片做转存
                     if e.name == 'img':
@@ -252,7 +252,7 @@ def get_tieba_reply(post_html,sort_name,page=1):
                         else:
                             continue
                     else:
-                        print 'string:',e.string,type(e.string)
+                        #print 'string:',e.string,type(e.string)
                         if e.string:
                             new_e = {'tag':e.name,'content':e.string.strip()}
                 else:
@@ -294,21 +294,21 @@ def get_tieba_info(tieba_name='liyi'):
     print '===================================================================='
 
 
-def add_reply_img():
-    """
-    增加 reply_img_count
-    """
-    posts = mdb.baidu.post.find()
-    for p in posts:
-        imgs = []
-        replys = p['content']
-        for r in replys:
-            elements = r['reply_content']
-            for e in elements:
-                if e['tag'] == 'img':
-                    res = e['content']
-                    imgs.append(res)
-        mdb.baidu.post.update({'_id':p['_id']},{'$set':{'reply_img_list':imgs,'reply_img_count':len(imgs)}})
+#def add_reply_img():
+#    """
+#    增加 reply_img_count
+#    """
+#    posts = mdb.baidu.post.find()
+#    for p in posts:
+#        imgs = []
+#        replys = p['content']
+#        for r in replys:
+#            elements = r['reply_content']
+#            for e in elements:
+#                if e['tag'] == 'img':
+#                    res = e['content']
+#                    imgs.append(res)
+#        mdb.baidu.post.update({'_id':p['_id']},{'$set':{'reply_img_list':imgs,'reply_img_count':len(imgs)}})
 
 if __name__ == "__main__":
     #if sys.argv[1] == 'test':
