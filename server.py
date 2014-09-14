@@ -271,7 +271,7 @@ class ApkDownload(BaseHandler):
     def get(self):
         """
         """
-        self.render('apk.html')
+        self.render('apk.html',version = settings.get('apk_version'))
 
 class ApkDownload2(BaseHandler):
     """
@@ -279,7 +279,7 @@ class ApkDownload2(BaseHandler):
     def get(self):
         """
         """
-        self.render('apk2.html')
+        self.render('apk2.html',version = settings.get('apk_version'))
 
 class ApkWXDownload(BaseHandler):
     """
@@ -287,7 +287,7 @@ class ApkWXDownload(BaseHandler):
     def get(self):
         """
         """
-        self.render('http://ostatic.qiniudn.com/fuliba1.0.3.apk')
+        self.render('http://ostatic.qiniudn.com/fuliba%s.apk'%settings.get('apk_version'))
 
 class LikePost(BaseHandler):
     """
