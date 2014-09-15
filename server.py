@@ -26,7 +26,7 @@ def transUinxtime2Strtime(utime,type=0):
         stime=time.strftime("%m.%d",time.localtime(utime))
         return stime
 
-def get_real_reply(elements,use_qiniu=False):
+def get_real_reply(elements,use_qiniu=True):
     """
     将字典数据转为html
     """
