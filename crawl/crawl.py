@@ -159,14 +159,13 @@ def get_tieba_post(tieba_name='liyi'):
                 #post_info['is_open'] = 0
                 #post_info['find_time'] =int(time.time())
             else:
-                post_info['content'],total_page,post_cover_img,reply_img_list = get_tieba_reply(post_html,sort_name=tieba_name)
+                post_info['content'],total_page,post_cover_img = get_tieba_reply(post_html,sort_name=tieba_name)
                 #print 'post_info:',post_info
                 print 'post_cover_img:',post_cover_img
                 logging.info('%s 帖子总共有 %s页'%(post_info['url'],total_page))
                 create_time = post_info['content'][0]['create_time'] 
                 post_info['create_time'] = create_time
                 post_info['find_time'] = time.time()
-                post_info['reply_img_list'] = reply_img_list
                 if post_cover_img:
                     post_info['post_cover_img'] = post_cover_img
                 else:
@@ -181,11 +180,9 @@ def get_tieba_post(tieba_name='liyi'):
                         logging.info("开始下载第%s页 %s"%(page_num,page_url))
                         post_html = get_html(page_url)
                         if post_html is not None and 'closeWindow' not in post_html:
-                            next_content,total_page,post_cover_img,reply_img_list = get_tieba_reply(post_html,sort_name=tieba_name,page=page_num)
-                            post_info['reply_img_list'].extend(reply_img_list)
+                            next_content,total_page,post_cover_img = get_tieba_reply(post_html,sort_name=tieba_name,page=page_num)
                             if next_content:
                                 post_info['content'].extend(next_content)
-            post_info['reply_img_count'] = len(post_info['reply_img_list'])
 
             #print 'post info:',post_info
             post_insert(post_info,'baidu')
@@ -209,7 +206,6 @@ def get_tieba_reply(post_html,sort_name,page=1):
     author_name = '' 
     #print reply_list
     new_reply_list = []
-    reply_img_list = []
     author_name = ''
     post_cover_img = ''
     for reply in reply_list:
@@ -248,7 +244,6 @@ def get_tieba_reply(post_html,sort_name,page=1):
                         if user_name == author_name and 'static' not in e['src']:
                             post_cover_img = e['src']
                             new_e = {'tag':'img','content':e['src']}
-                            reply_img_list.append(e['src'])
                         else:
                             continue
                     else:
@@ -269,7 +264,7 @@ def get_tieba_reply(post_html,sort_name,page=1):
             continue
         floor+=1
     #print 'new reply list:',new_reply_list
-    return new_reply_list,total_page,post_cover_img,reply_img_list
+    return new_reply_list,total_page,post_cover_img
 
 def check_filter_title():
     post_list=tieba.post.find({'is_open':0},limit=50,skip=0,sort=[('find_time',DESCENDING)])

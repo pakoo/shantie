@@ -58,6 +58,7 @@ def save_post_img(post_id):
     post_info = mdb.baidu.post.find_one({'url':post_id})
     need_reset = False
     if post_info:
+        reply_img_list = []
         for r in post_info['content']:
             reply_content = []
             for e in r['reply_content']:
@@ -67,6 +68,7 @@ def save_post_img(post_id):
                     tools.update_web_file(e['content'],img_key)
                     e['old_content'] = e['content']
                     e['content'] = img_key
+                    reply_img_list.append(img_key)
                     need_reset = True
                     if not post_cover_img:
                         post_cover_img = img_key
@@ -74,7 +76,7 @@ def save_post_img(post_id):
             content.append(r)
         if need_reset:
             logging.warning('>>>>>>>>>>>>>reset baidu post %s content '%post_info['url'])
-            mdb.baidu.post.update({'_id':post_info['_id']},{'$set':{'content':content,'post_cover_img':post_cover_img}})
+            mdb.baidu.post.update({'_id':post_info['_id']},{'$set':{'content':content,'post_cover_img':post_cover_img,'reply_img_list':reply_img_list,'reply_img_count':len(reply_img_list)}})
 
 
 
