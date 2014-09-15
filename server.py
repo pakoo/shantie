@@ -36,7 +36,7 @@ def get_real_reply(elements,use_qiniu=True):
         if e['tag'] == 'img':
             #是否使用七牛的图片
             if use_qiniu:
-                new_e = '<img src="%s" class="img-responsive">'%tools.imgurl(e['content'],pformat='?post')
+                new_e = '<img src="%s" class="img-responsive">'%tools.imgurl(e['content'],pformat='-post')
             else:
                 new_e = '<img src="%s" class="img-responsive">'%(e.get('old_content','') or e.get('content','')+"?kilobug") 
         else:
