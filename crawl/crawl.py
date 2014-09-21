@@ -235,7 +235,8 @@ def get_tieba_reply(post_html,sort_name,page=1):
         elements = content.div.contents
         if elements:
             new_elements = {'reply_content':[]}
-            for e in elements[:10]:
+            for e in elements:
+                #print '*************************************\n'
                 #print 'e:',e,type(e),e.name
                 if isinstance(e,Tag):
                     #对图片做转存
@@ -250,15 +251,16 @@ def get_tieba_reply(post_html,sort_name,page=1):
                         #print 'string:',e.string,type(e.string)
                         if e.string:
                             new_e = {'tag':e.name,'content':e.string.strip()}
+                        else:
+                            continue
                 else:
                     new_e = {'tag':'p','content':e.string.strip()}
                 if new_e['content']:
                     new_elements['reply_content'].append(new_e)
-            
             new_elements['create_time'] = transtime(create_time)
             new_elements['user_name'] = user_name 
             new_elements['user_id'] = user_id 
-            #print 'new elements:',new_elements
+            #print 'new elements:',json.dumps(new_elements)
             new_reply_list.append(new_elements)
         else:
             continue
@@ -306,6 +308,7 @@ def get_tieba_info(tieba_name='liyi'):
 #        mdb.baidu.post.update({'_id':p['_id']},{'$set':{'reply_img_list':imgs,'reply_img_count':len(imgs)}})
 
 if __name__ == "__main__":
+    import json
     #if sys.argv[1] == 'test':
     #    get_tieba_info()
     #elif sys.argv[1] == 'kds':
@@ -327,13 +330,12 @@ if __name__ == "__main__":
     #            print('\n'*9)
 
 
-    #html = get_html("http://tieba.baidu.com/p/2869738895")
-    #print get_tieba_reply(html,'liyi','2869738895')
+    #html = get_html("http://tieba.baidu.com/p/3305591325")
+    #print 'data:',json.dumps(get_tieba_reply(html,'liyi',1)[0])
     
     while True:
         try:
             get_tieba_post("liyi")
-            #get_tieba_post_img(u"姐脱")
         except Exception,e:
             print('\n'*9)
             traceback.print_exc()
