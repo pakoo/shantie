@@ -144,7 +144,7 @@ class PostJson(BaseHandler):
                 if r['tag'] == 'img':
                     r['content'] = tools.imgurl(r['content'],pformat='-post')
         self.finish(tools.dumps(post_info))
-        mdb.baidu.update({'_id':ObjectId(post_id)},{'$set':{'last_click_time':time.time()},'$inc':{'click':1}})
+        mdb.baidu.post.update({'_id':ObjectId(post_id)},{'$set':{'last_click_time':time.time()},'$inc':{'click':1}})
 
 
 
