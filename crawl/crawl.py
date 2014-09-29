@@ -31,7 +31,6 @@ gfw.set(open(os.path.join(os.path.dirname(__file__),'keyword.txt')).read().split
 lgfw = GFW()
 lgfw.set(['thunder://','magnet:','ed2k://'])
 
-
 tongji = """
 <center>
 <script language="javascript" type="text/javascript" src="http://js.users.51.la/5988086.js"></script>
@@ -255,7 +254,7 @@ def get_tieba_reply(post_html,sort_name,page=1):
                             continue
                 else:
                     new_e = {'tag':'p','content':e.string.strip()}
-                if new_e['content']:
+                if new_e['content'] and len(new_e['content']) > 2:
                     new_elements['reply_content'].append(new_e)
             new_elements['create_time'] = transtime(create_time)
             new_elements['user_name'] = user_name 
