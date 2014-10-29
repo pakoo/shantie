@@ -73,35 +73,14 @@ def get_html(url,referer ='',verbose=False,protocol='http'):
         print('\n'*9)
         return None
     return html
-"""
-def get_html(url):
-    logging.info( '============================================')
-    logging.info( 'url:%s'%url)
-    logging.info( '============================================')
-    time.sleep(1)
-    html=''
-    try:
-        crl = pycurl.Curl()
-        crl.setopt(pycurl.VERBOSE,1)
-        crl.setopt(pycurl.FOLLOWLOCATION, 1)
-        crl.setopt(pycurl.MAXREDIRS, 5)
-        crl.setopt(pycurl.CONNECTTIMEOUT, 8)
-        crl.setopt(pycurl.TIMEOUT, 30)
-        crl.setopt(pycurl.MAXREDIRS,15)
-        crl.setopt(pycurl.USERAGENT,'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1')
-        crl.fp = StringIO.StringIO()
-        crl.setopt(pycurl.URL, url)
-        crl.setopt(crl.WRITEFUNCTION, crl.fp.write)
-        crl.perform()
-        html=crl.fp.getvalue()
-        crl.close()
-    except Exception,e:
-        print('\n'*9)
-        traceback.print_exc()
-        print('\n'*9)
+
+def get_html2(url):
+    res =  mdb.httpclient.get(url)
+    if res.status_code != 200:
         return None
-    return html
-"""
+    else:
+        return res.content
+
 
 def imgurl(key,space='',pformat=''):
     if not space:

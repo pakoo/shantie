@@ -14,6 +14,7 @@ import BeautifulSoup as bsoup
 from bs4 import BeautifulSoup as bs4,Tag
 import logging
 import review_open_post
+import mdb
 
 mktime=lambda dt:time.mktime(dt.utctimetuple())
 ######################db.init######################
@@ -289,25 +290,96 @@ def get_tieba_info(tieba_name='liyi'):
     print 'img count:',img.find({'type_name':tieba_name}).count()
     print '===================================================================='
 
+def get_yy_href(tag):
+    url = ''
+    if tag.get('thunderhref'):
+        url = tag.get('thunderhref')
+    elif tag.get('qhref'):
+        url = tag.get('qhref')
+    elif tag.get('href'):
+        url = tag.get('href')
 
-#def add_reply_img():
-#    """
-#    增加 reply_img_count
-#    """
-#    posts = mdb.baidu.post.find()
-#    for p in posts:
-#        imgs = []
-#        replys = p['content']
-#        for r in replys:
-#            elements = r['reply_content']
-#            for e in elements:
-#                if e['tag'] == 'img':
-#                    res = e['content']
-#                    imgs.append(res)
-#        mdb.baidu.post.update({'_id':p['_id']},{'$set':{'reply_img_list':imgs,'reply_img_count':len(imgs)}})
+    site_name = tag.string
+    return site_name,url
+
+
+def get_yy_download_url(html,url):
+    print 'url:',url
+    #html = tools.get_html2(url)
+    yyid = url.split('/')[-1]
+    #soup = bs4(html,from_encoding='gbk')
+    soup = bs4(html)
+    season_list = soup.find_all('ul',class_='resod_list')
+    #print 'season len:',len(season_list)
+    info = soup.find_all('ul',class_='r_d_info')[0]
+    cover_img = soup.find_all('div',class_='f_l_img')[0].find_all('img')[0]['src']
+    album_name = soup.find_all('strong')[0].contents[0]
+    #print 'cover_img:',cover_img
+    #print 'info:',info
+    print 'yyid:',yyid
+    album= {'_id':ObjectId()}
+    album['yyid'] = yyid
+    album['cover_img'] =cover_img
+    album['info'] =repr(info)
+    album['season'] =len(season_list)
+    album['create_time'] = time.time()
+    album['name'] = album_name
+    #print 'album_info:',album
+    mdb.yy.album.insert(album)
+    for season in season_list:
+        video_list=season.find_all('li')
+        print 'video len:',len(video_list)
+        #print 'video season:',season['season']
+        season_id = season['season']
+        video_data = {'season':season_id,'video':[]}
+        for video in video_list:
+            #print '==================================================='
+            data={'link':[],'album_id':album['_id']}
+            video_format = video['format']
+            video_id = video['itemid']
+            data['item_id'] = video_id
+            data['format'] = video_format
+            data['album_name'] = album_name
+            lks = video.find_all('div',class_="lks")[0]
+            pks = video.find_all('div',class_="pks")
+            download_links = pks[0].find_all('a')
+            title = lks.find_all('a')[0]['title']
+            data['title'] = title
+            data['season'] = season_id
+            for link in download_links:
+                site_name,url = get_yy_href(link)
+                data['link'].append({'name':site_name,'url':url})
+            #print 'data:',data
+            mdb.yy.video.insert(data)
+
+def run_yy():
+    """
+    """
+    root = "http://www.yyets.com/resource/%s"
+    for i in range(23000):
+        url = root%(10010+i)
+        html = tools.get_html2(url)
+        if not html:
+            print '请求页面失败:',url
+            html = tools.get_html2(url)
+            if not html:
+                print '第二次请求页面失败:',url
+                continue
+        elif '3*1000' in str(html):
+            print '剧集不存在:',url
+            continue
+        get_yy_download_url(html,url)
+        print '剧集存在:',url
+        time.sleep(0.2)
+
+            
 
 if __name__ == "__main__":
     import json
+    #html = tools.get_html2("http://www.yyets.com/resource/10017")
+    #get_yy_download_url(html,"http://www.yyets.com/resource/10017")
+    #run_yy()
+
     #if sys.argv[1] == 'test':
     #    get_tieba_info()
     #elif sys.argv[1] == 'kds':
@@ -332,13 +404,13 @@ if __name__ == "__main__":
     #html = get_html("http://tieba.baidu.com/p/3305591325")
     #print 'data:',json.dumps(get_tieba_reply(html,'liyi',1)[0])
     
-    while True:
-        try:
-            get_tieba_post("liyi")
-        except Exception,e:
-            print('\n'*9)
-            traceback.print_exc()
-            print('\n'*9)
+    #while True:
+    #    try:
+    #        get_tieba_post("liyi")
+    #    except Exception,e:
+    #        print('\n'*9)
+    #        traceback.print_exc()
+    #        print('\n'*9)
     
     #get_tieba_post("liyi")
 

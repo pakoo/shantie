@@ -32,6 +32,7 @@ connection = mdb.con
 get_html = tools.get_html
 
 baidu = mdb.baidu
+yy = mdb.yy
 
 
 root = logging.getLogger()
