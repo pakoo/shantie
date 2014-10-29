@@ -357,20 +357,26 @@ def run_yy():
     """
     root = "http://www.yyets.com/resource/%s"
     for i in range(23000):
-        url = root%(10010+i)
-        html = tools.get_html2(url)
-        if not html:
-            print '请求页面失败:',url
+        try:
+            url = root%(10010+i)
             html = tools.get_html2(url)
             if not html:
-                print '第二次请求页面失败:',url
+                print '请求页面失败:',url
+                html = tools.get_html2(url)
+                if not html:
+                    print '第二次请求页面失败:',url
+                    continue
+            elif '3*1000' in str(html):
+                print '剧集不存在:',url
                 continue
-        elif '3*1000' in str(html):
-            print '剧集不存在:',url
+            get_yy_download_url(html,url)
+            print '剧集存在:',url
+            time.sleep(0.2)
+        except Exception,e:
+            print('\n'*9)
+            traceback.print_exc()
             continue
-        get_yy_download_url(html,url)
-        print '剧集存在:',url
-        time.sleep(0.2)
+            print('\n'*9)
 
             
 
