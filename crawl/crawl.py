@@ -325,10 +325,10 @@ def get_yy_download_url(html,url):
     album['create_time'] = time.time()
     album['name'] = album_name
     #print 'album_info:',album
-    mdb.yy.album.insert(album)
+    #mdb.yy.album.insert(album)
     for season in season_list:
         video_list=season.find_all('li')
-        print 'video len:',len(video_list)
+        #print 'video len:',len(video_list)
         #print 'video season:',season['season']
         season_id = season['season']
         video_data = {'season':season_id,'video':[]}
@@ -349,8 +349,8 @@ def get_yy_download_url(html,url):
             for link in download_links:
                 site_name,url = get_yy_href(link)
                 data['link'].append({'name':site_name,'url':url})
-            #print 'data:',data
-            mdb.yy.video.insert(data)
+            print 'data:',data
+            #mdb.yy.video.insert(data)
 
 def run_yy():
     """
@@ -382,8 +382,6 @@ def run_yy():
 
 if __name__ == "__main__":
     import json
-    #html = tools.get_html2("http://www.yyets.com/resource/10017")
-    #get_yy_download_url(html,"http://www.yyets.com/resource/10017")
     #run_yy()
 
     #if sys.argv[1] == 'test':
@@ -418,7 +416,7 @@ if __name__ == "__main__":
     #        traceback.print_exc()
     #        print('\n'*9)
     
-    #get_tieba_post("liyi")
+    get_tieba_post("liyi")
 
     #get_tieba_info()
     #get_tieba_post("jietup")

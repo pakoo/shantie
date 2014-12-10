@@ -357,6 +357,27 @@ class HotAlbumJson(BaseHandler):
             album_list[idx].pop('reply_img_list')
 
         self.finish(json.dumps({'fuli_list':album_list}))
+
+
+class Yvideo(BaseHandler):
+    """
+    """
+    def get(self,aid):
+        print 'aid:',aid
+        res = {}
+        album_id = is_oid(aid)
+        album_info = mdb.con.yy.album.find_one({'_id':ObjectId(album_id)})
+        album_info['season'] = int(album_info['season'])
+        print 'album_id:',album_id
+        videos = mdb.con.yy.video.find({'album_id':ObjectId(album_id)})
+        for v in videos:
+            if res.get(v['season'],None):
+                res[v['season']].append(v)
+            else:
+                res[v['season']] = [v]
+        print 'videos:',videos.count()
+        self.render("yvideo.html",data=res,album_info=album_info)
+
 #class YoLogin(YoHandler):
 #
 #    def get(self):
@@ -366,8 +387,7 @@ class HotAlbumJson(BaseHandler):
 #            res = mdb.yocon.user.find_one({'_id':u['to']})
 #            following_info.append({'name':res['name'],'uid':u['to']})
 #        self.sendline({'name':self.name,'uid':self.uid,'following_info':following_info})
-#
-#
+
 #class YoNewUser(YoHandler):
 #    """
 #    注册用户
@@ -461,6 +481,9 @@ class Application(tornado.web.Application):
             #(r'/yo_adduser',YoAddUser),
             #(r'/yo_push',YoPush),
 
+
+            (r'/video/(\w{24})',Yvideo),
+
             (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "static"}),
             #(r'/uploadfile/(.*)', tornado.web.StaticFileHandler, {"path": "share"}),
 
@@ -473,12 +496,13 @@ class Application(tornado.web.Application):
 
         tornado.web.Application.__init__(self,default_host="www.404cn\.org",handlers=handlers,**app_settings)
 
-        self.add_handlers(r"www\.oucena\.com", [
+
+        self.add_handlers(r"weixin\.404cn\.org", [
         (r"/", app.weixin),
         (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
         ])
 
-        self.add_handlers(r"oucena\.com", [
+        self.add_handlers(r"weixin\.404cn\.org", [
         (r"/", app.weixin),
         (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
         ])
