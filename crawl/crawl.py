@@ -98,14 +98,16 @@ def get_tieba_post(tieba_name='liyi'):
     tieba_html = get_html(url)
     #print 'tieba_html:',tieba_html
     if tieba_html:
-        soup = bs4(tieba_html,from_encoding='gbk')
+        #soup = bs4(tieba_html,from_encoding='gbk')
+        soup = bs4(tieba_html)
         thread_list = soup.find('ul',{'id':'thread_list'})
-        #print 'thread_list:',thread_list
+        #print 'thread_list:',len(thread_list)
+        #return
         post_list = thread_list.find_all('li',class_='j_thread_list clearfix')
-        print "post_list:",len(post_list)
+        #print "post_list:",len(post_list)
         #print 'post:',post_list[-1]
         for p in post_list[2:]:
-            #print '===================================\n'
+            print '===================================\n'
             #print 'row:',p
             time.sleep(3)
             div_title = p.find('a',{'class':'j_th_tit'})
@@ -194,7 +196,7 @@ def get_tieba_reply(post_html,sort_name,page=1):
     """
     解析帖子内容
     """
-    post_soup = bs4(post_html,from_encoding='gbk')
+    post_soup = bs4(post_html)
     #获取帖子总页数
     total_page = int(post_soup.find('li',{'class':'l_reply_num'}).find_all('span')[-1].string)
     db_name = 'tieba'
@@ -408,15 +410,15 @@ if __name__ == "__main__":
     #html = get_html("http://tieba.baidu.com/p/3305591325")
     #print 'data:',json.dumps(get_tieba_reply(html,'liyi',1)[0])
     
-    #while True:
-    #    try:
-    #        get_tieba_post("liyi")
-    #    except Exception,e:
-    #        print('\n'*9)
-    #        traceback.print_exc()
-    #        print('\n'*9)
+    while True:
+        try:
+            get_tieba_post("liyi")
+        except Exception,e:
+            print('\n'*9)
+            traceback.print_exc()
+            print('\n'*9)
     
-    get_tieba_post("liyi")
+    #get_tieba_post("liyi")
 
     #get_tieba_info()
     #get_tieba_post("jietup")
