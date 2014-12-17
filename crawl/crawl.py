@@ -112,6 +112,9 @@ def get_tieba_post(tieba_name='liyi'):
             time.sleep(3)
             div_title = p.find('a',{'class':'j_th_tit'})
             title_text = div_title.text
+            #print 'title:',type(title_text),len(title_text)
+            if len(title_text) <=5 :
+                continue
             org_title = title_text.encode('utf-8')
             filter_title = gfw.replace(org_title)
             if org_title != filter_title:
