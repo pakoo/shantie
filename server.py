@@ -378,6 +378,16 @@ class Yvideo(BaseHandler):
         print 'videos:',videos.count()
         self.render("yvideo.html",data=res,album_info=album_info)
 
+class Xiameiju(BaseHandler):
+    """
+    """
+    def get(self,page):
+        page=int(page)
+        print 'page:',page
+        count = 100
+        album = mdb.con.yy.album.find({},sort=[('_id',-1)],skip=(page-1)*count,limit=count)
+        self.render("yindex.html",video=album,page=page)
+
 #class YoLogin(YoHandler):
 #
 #    def get(self):
@@ -505,6 +515,7 @@ class Application(tornado.web.Application):
         self.add_handlers(r"www\.xiameiju\.net", [
         #(r"/", app.weixin),
         (r'/video/(\w{24})',Yvideo),
+        (r'/(\d{1-5})',Yvideo),
         (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
         ])
 
