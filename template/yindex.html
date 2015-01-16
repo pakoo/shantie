@@ -13,10 +13,16 @@
                 <tbody>
                     {%for v in videos%}
                         <tr>
-                            <td>{{v['name']}}</td>
+                            <td><a href="/video/{{v['_id']}}">{{v['name']}}</td>
                         </tr>
                     {%end%}
                 </tbody>
             </table>
+            <ul class="pager">
+                {%if page-1 >0%}
+                    <li><a href="/{{page-1}}">上一页</a></li>
+                {%end%}
+                    <li><a href="/{{page+1}}">下一页</a></li>
+            </ul>
         </div>
 {%end%}
