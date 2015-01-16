@@ -1,0 +1,22 @@
+{% autoescape None %}
+{%extends ybase.html%}
+{%block title%}下美剧-xiameiju{%end%}
+{%block description%}美剧下载 ed2k manget 电驴 迅雷{%end%}
+{%block main%}
+        <div class="tab-content" id="myTabContent">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                    <th>剧名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for v in videos%}
+                        <tr>
+                            <td>{{v['name']}}</td>
+                        </tr>
+                    {%end%}
+                </tbody>
+            </table>
+        </div>
+{%end%}
