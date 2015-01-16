@@ -502,10 +502,12 @@ class Application(tornado.web.Application):
         (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
         ])
 
-        self.add_handlers(r"weixin\.404cn\.org", [
-        (r"/", app.weixin),
+        self.add_handlers(r"www\.xiameiju\.net", [
+        #(r"/", app.weixin),
+        (r'/video/(\w{24})',Yvideo),
         (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
         ])
+
 
 if __name__ == '__main__':
     mdb.init()
