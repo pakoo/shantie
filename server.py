@@ -387,7 +387,7 @@ class Xiameiju(BaseHandler):
         page=int(page)
         print 'page:',page
         count = 100
-        album = mdb.con.yy.album.find({},sort=[('_id',-1)],skip=(page-1)*count,limit=count)
+        album = mdb.con.yy.album.find({},sort=[('create_time',-1)],skip=(page-1)*count,limit=count)
         self.render("yindex.html",videos=album,page=page)
 
 #class YoLogin(YoHandler):
