@@ -1,0 +1,52 @@
+{% autoescape None %}
+{%extends ybase.html%}
+{%block title%}{{album_info['name']}} 下载 ed2k magnet{%end%}
+{%block description%}{{album_info['name']}} 下载 ed2k magnet{%end%}
+{%block main%}
+        <div class="jumbotron">
+                <h1>{{album_info['name']}}</h1>
+                {{album_info['info']}}
+        </div>
+        <ul role="tablist" class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#season{{album_info['season']}}">第{{album_info['season']}}季</a></li>
+            {%for i in reversed(range(album_info['season']-1))%}
+                <li><a data-toggle="tab" href="#season{{i+1}}">第{{i+1}}季</a></li>            
+            {%end%}
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            {%for s,videos in data.items()%}
+                {%if s == str(album_info['season']) %}
+                    <div id="season{{s}}" class="tab-pane fade in active">
+                {%else%}
+                    <div id="season{{s}}" class="tab-pane fade">
+                {%end%}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                            <th>格式</th>
+                            <th>文件名</th>
+                            <th>电驴</th>
+                            <th>迅雷</th>
+                            <th>旋风</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {%for v in videos%}
+                                <tr>
+                                <td>{{v['format']}}</td>
+                                <td>{{v['title']}}</td>
+                                <td><a href="{{v['link'][0]['url']}}"><button type="button" class="btn btn-primary" type="ed2k" >{{v['link'][0]['name']}}</button></a></td>
+                                <td><a href="{{v['link'][1]['url']}}"><button type="button" class="btn btn-success" type="ed2k" >{{v['link'][1]['name']}}</button></a></td>
+                                <td><a href="{{v['link'][2]['url']}}"><button type="button" class="btn btn-info" type="ed2k" >{{v['link'][2]['name']}}</button></a></td>
+                                </tr>
+                            {%end%}
+                        </tbody>
+                    </table>
+                    </table>
+                </div>
+            {%end%}
+        </div>
+
+
+{%end%}

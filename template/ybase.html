@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{%block description%}{%end%}">
+    <meta name="author" content="">
+    <link rel="icon" href="/static/favicon.ico">
+
+    <title>{%block title%}{%end%}</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+      <!-- Optional Bootstrap Theme -->
+        <link href="data:text/css;charset=utf-8," data-href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css" rel="stylesheet" id="bs-theme-stylesheet">
+
+        <link href="../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+        <link href="../assets/css/docs.min.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="/static/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container">
+        {%include ynav.html %}
+        {%block main%}{%end%}
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/holder.js"></script>
+
+    <div style="display:none">
+        <script language="javascript" type="text/javascript" src="http://js.users.51.la/9399637.js"></script>
+        <noscript ><a href="http://www.51.la/?9399637" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/9399637.asp" ></a>
+         </noscript>
+     </div>
+    
+     <script type="text/javascript">
+       var _gaq = _gaq || [];
+       var pluginUrl =  '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+       _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+       _gaq.push(['_setAccount', 'UA-33701837-1']);
+       _gaq.push(['_setDomainName', '']);
+       _gaq.push(['_trackPageview']);
+    
+       (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+       })();
+    
+     String.prototype.replaceAll= function(s1,s2){
+         return this.replace(new RegExp(s1,"gm"),s2);
+     }
+    </script>
+
+  </body>
+</html>
