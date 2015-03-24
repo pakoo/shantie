@@ -384,42 +384,54 @@ def run_yy():
             print('\n'*9)
 
             
+def pm25data():
+    url = "http://www.cnpm25.com/rank/"
+    html = get_html(url)
+    soup = bs4(html)
+    citys = soup.table.find_all('tr')[1].find_all('tr')[2:-2]
+    now =datetime.datetime.now() 
+    for city in citys:
+        tds = city.find_all('td')
+        name = tds[1].text
+        level = tds[3].text
+        pm25 = tds[-1].text
+        print '%s:%s %s'%(name,pm25,level)
+        mdb.con['air'].pmcn.insert({
+            'create_time':time.time(), 
+            'data':int(pm25),
+            'location':name,
+            'publish_time':'%s-%s-%s'%(now.year,now.month,now.day),
+            })
 
 if __name__ == "__main__":
     import json
     #run_yy()
 
-    #if sys.argv[1] == 'test':
-    #    get_tieba_info()
-    #elif sys.argv[1] == 'kds':
-    #    while True:
-    #        try:
-    #            get_kds_post()
-    #        except Exception,e:
-    #            print('\n'*9)
-    #            traceback.print_exc()
-    #            print('\n'*9)
-    #else:
-    #    while True:
-    #        try:
-    #            get_tieba_post("liyi")
-    #            #get_tieba_post_img(u"姐脱")
-    #        except Exception,e:
-    #            print('\n'*9)
-    #            traceback.print_exc()
-    #            print('\n'*9)
+    if sys.argv[1] == 'test':
+        get_tieba_info()
+    elif sys.argv[1] == 'pm25':
+        pm25data()
+    elif sys.argv[1] == 'liyi':
+        while True:
+            try:
+                get_tieba_post("liyi")
+                #get_tieba_post_img(u"姐脱")
+            except Exception,e:
+                print('\n'*9)
+                traceback.print_exc()
+                print('\n'*9)
 
 
     #html = get_html("http://tieba.baidu.com/p/3305591325")
     #print 'data:',json.dumps(get_tieba_reply(html,'liyi',1)[0])
     
-    while True:
-        try:
-            get_tieba_post("liyi")
-        except Exception,e:
-            print('\n'*9)
-            traceback.print_exc()
-            print('\n'*9)
+    #while True:
+    #    try:
+    #        get_tieba_post("liyi")
+    #    except Exception,e:
+    #        print('\n'*9)
+    #        traceback.print_exc()
+    #        print('\n'*9)
     
     #get_tieba_post("liyi")
 
@@ -427,4 +439,5 @@ if __name__ == "__main__":
     #get_tieba_post("jietup")
     #get_tieba_post("liyi")
     #get_tieba_post_img("jietup")
+    #print pm25data()
 

@@ -14,6 +14,7 @@ import mdb
 
 
 db = mdb.con.air.pm
+cndb = mdb.con.air.pmcn
 
 
 
@@ -87,6 +88,11 @@ def get_pm(place):
     res = db.find_one({'location':place},sort=[('create_time',-1)])    
     if res:
         return res
+    else:
+        cndata = cndb.find_one({'location':place},sort=[('create_time',-1)])
+        if cndata:
+            return cndata
+
 
 def get_level(data):
     if 0<= data <=50:
@@ -189,6 +195,7 @@ class weixin(tornado.web.RequestHandler):
 
     def post(self):
         if self.msgtype == 'text':
+            #cndata = 
             if self.wxtext in ('1','shanghai','上海') :
                 res = get_pm('shanghai')
                 pm25 = res['data']
@@ -210,16 +217,22 @@ class weixin(tornado.web.RequestHandler):
                 ctime = str(res['publish_time'])
                 place = '成都'
             elif self.wxtext == '5':
-                items = [('title1','description1','http://oucena.com/static/img/bt.jpg','http://oucena.com/airpic?pm25=18')]  
+                items = [('title1','description1','http://www.xiameiju.net/static/img/bt.jpg','http://oucena.com/airpic?pm25=18')]  
                 self.send_news(items)
             else:
-                a = """发送 “1”查询上海 美国领事馆发布的 pm2.5 数据
-                     \n发送 “2”查询北京 美国领事馆发布的 pm2.5 数据
-                     \n发送 “3”查询广州 美国领事馆发布的 pm2.5 数据
-                     \n发送 “4”查询成都 美国领事馆发布的 pm2.5 数据
-                    """
-                self.send_text(a)    
-                return 
+                res = get_pm(self.wxtext)
+                if res:
+                    pm25 = res['data']
+                    ctime = res['publish_time']
+                    place = self.wxtext
+                else:
+                    a = """发送 “1”查询上海 美国领事馆发布的 pm2.5 数据
+                         \n发送 “2”查询北京 美国领事馆发布的 pm2.5 数据
+                         \n发送 “3”查询广州 美国领事馆发布的 pm2.5 数据
+                         \n发送 “4”查询成都 美国领事馆发布的 pm2.5 数据
+                        """
+                    self.send_text(a)    
+                    return 
             if 'No' not in  str(pm25):
                 air_level =get_level(int(float(pm25)))  
                 msg = "%s %s PM2.5:%s  %s "%(ctime,place,pm25,air_level)
@@ -280,7 +293,7 @@ E-mail：hanfook@hanfook.com.cn
 
     def send_air_pic(self,pm25,msg):
         pic_url = self.get_shanghai_air_pic()
-        items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://oucena.com/airpic?pm25=%s"%pm25)]  
+        items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://www.liuliu.co/")]  
         #items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,pic_url)]  
         self.send_news(items)
 
