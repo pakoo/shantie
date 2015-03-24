@@ -389,7 +389,7 @@ def pm25data():
     html = get_html(url)
     soup = bs4(html)
     citys = soup.table.find_all('tr')[1].find_all('tr')[2:-2]
-    now =datetime.datetime.now() 
+    now =datetime.datetime() 
     for city in citys:
         tds = city.find_all('td')
         name = tds[1].text
@@ -402,7 +402,7 @@ def pm25data():
                 'create_time':time.time(), 
                 'data':int(pm25),
                 'location':name,
-                'publish_time':'%s-%s-%s'%(now.year,now.month,now.day),
+                'publish_time':'%s-%s-%s %s:%s'%(now.year,now.month,now.day,now.hour,now.minute),
                 }
                 },
                 upsert=True)
