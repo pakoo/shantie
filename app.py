@@ -226,11 +226,12 @@ class weixin(tornado.web.RequestHandler):
                     ctime = res['publish_time']
                     place = self.wxtext
                 else:
-                    a = """发送 “1”查询上海 美国领事馆发布的 pm2.5 数据
-                         \n发送 “2”查询北京 美国领事馆发布的 pm2.5 数据
-                         \n发送 “3”查询广州 美国领事馆发布的 pm2.5 数据
-                         \n发送 “4”查询成都 美国领事馆发布的 pm2.5 数据
-                        """
+                    #a = """发送 “1”查询上海 美国领事馆发布的 pm2.5 数据
+                    #     \n发送 “2”查询北京 美国领事馆发布的 pm2.5 数据
+                    #     \n发送 “3”查询广州 美国领事馆发布的 pm2.5 数据
+                    #     \n发送 “4”查询成都 美国领事馆发布的 pm2.5 数据
+                    #"""
+                    a = '直接输入城市名字即可 例如:上海'
                     self.send_text(a)    
                     return 
             if 'No' not in  str(pm25):
