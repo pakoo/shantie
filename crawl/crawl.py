@@ -396,12 +396,16 @@ def pm25data():
         level = tds[3].text
         pm25 = tds[-1].text
         print '%s:%s %s'%(name,pm25,level)
-        mdb.con['air'].pmcn.insert({
-            'create_time':time.time(), 
-            'data':int(pm25),
-            'location':name,
-            'publish_time':'%s-%s-%s'%(now.year,now.month,now.day),
-            })
+        mdb.con['air'].pmcn.update(
+                {'location':name},
+                {'$set':{
+                'create_time':time.time(), 
+                'data':int(pm25),
+                'location':name,
+                'publish_time':'%s-%s-%s'%(now.year,now.month,now.day),
+                }
+                },
+                upsert=True)
 
 if __name__ == "__main__":
     import json
