@@ -13,7 +13,6 @@ import urllib
 import BeautifulSoup as bsoup
 from bs4 import BeautifulSoup as bs4,Tag
 import logging
-import review_open_post
 import mdb
 
 mktime=lambda dt:time.mktime(dt.utctimetuple())
@@ -26,11 +25,6 @@ tieba_post = baidu.post
 
 browser = requests.session()
 ######################gfw.init######################
-gfw = GFW()
-gfw.set(open(os.path.join(os.path.dirname(__file__),'keyword.txt')).read().split('\n'))
-
-lgfw = GFW()
-lgfw.set(['thunder://','magnet:','ed2k://'])
 
 tongji = """
 <center>
@@ -416,6 +410,12 @@ if __name__ == "__main__":
     elif sys.argv[1] == 'pm25':
         pm25data()
     elif sys.argv[1] == 'liyi':
+        import review_open_post
+        gfw = GFW()
+        gfw.set(open(os.path.join(os.path.dirname(__file__),'keyword.txt')).read().split('\n'))
+        
+        lgfw = GFW()
+        lgfw.set(['thunder://','magnet:','ed2k://'])
         while True:
             try:
                 get_tieba_post("liyi")
