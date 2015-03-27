@@ -239,7 +239,7 @@ class weixin(tornado.web.RequestHandler):
                 msg = "%s %s PM2.5:%s  %s "%(ctime,place,pm25,air_level)
             else:
                 msg = "暂无数据"
-            if self.wxtext in in ('1','shanghai','上海'):
+            if self.wxtext  in ('1','shanghai','上海'):
                 self.send_air_pic(pm25,msg)
             else:
                 self.send_text(msg)    
