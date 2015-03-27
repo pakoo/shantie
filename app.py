@@ -294,7 +294,7 @@ E-mail：hanfook@hanfook.com.cn
 
     def send_air_pic(self,pm25,msg):
         pic_url = self.get_shanghai_air_pic()
-        items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://www.liuliu.co/")]  
+        items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://www.liuliu.co/?from=pm25")]  
         #items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,pic_url)]  
         self.send_news(items)
 
