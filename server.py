@@ -512,6 +512,7 @@ class Application(tornado.web.Application):
 
         self.add_handlers(r"weixin\.xiameiju\.net", [
         (r"/", app.weixin),
+        (r"/livepic", app.LiveCityPic),
         (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"}),
         ])
 

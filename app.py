@@ -359,9 +359,10 @@ class www(tornado.web.RequestHandler):
 class LiveCityPic(tornado.web.RequestHandler):
 
     def get(self):
-        city_id = self.get_arugment('city_id')
+        city_id = int(self.get_argument('city_id'))
         pic_list = db2.find_one({'city_id':city_id},sort=[('create_time',-1)])
-        self.render("air_pic.html",pic_list=pic_list)
+        print 'plist:',pic_list
+        self.render("air_pic.html",pic_list=pic_list['pic_list'])
 
 
 
@@ -372,6 +373,7 @@ class Application(tornado.web.Application):
         }
         handlers = [
             (r'/',weixin),
+            (r'/livepic',LiveCityPic),
             (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
         ]
         tornado.web.Application.__init__(self,handlers,**app_settings)

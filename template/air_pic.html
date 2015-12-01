@@ -97,7 +97,7 @@ body {
 	box-sizing: border-box;
 	border: #000000 1px solid;
 	background: center center no-repeat;
-	background-size: contain;
+	background-size: cover;
 	float: left;
 }
 
@@ -117,7 +117,7 @@ body {
 </style>
 </head>
 <body>
-	{%for p in plist%}
+	{%for p in pic_list%}
 	<div class="frame" style="background-image: url(http://ugc.moji001.com/images/sthumb/{{p['path']}})"><p class="title">{{p['location']}}</p></div>
 	{%end%}
 </body>
