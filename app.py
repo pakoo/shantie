@@ -241,7 +241,12 @@ class weixin(tornado.web.RequestHandler):
             else:
                 msg = "暂无数据"
             if self.wxtext  in ('1','shanghai','上海'):
-                self.send_air_pic(pm25,msg)
+                pic_url = self.get_shanghai_air_pic()
+                items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://weixin.xiameiju.net/livepic?city_id=340")]  
+                self.send_air_pic(items)
+            elif self.wxtext  in ('2','beijing','北京'):
+                self.send_air_pic(pm25,msg,res.get('cover'),"http://weixin.xiameiju.net/livepic?city_id=33")
+                self.send_air_pic(items)
             else:
                 self.send_text(msg)    
         elif self.msgtype == 'location':
@@ -293,9 +298,9 @@ E-mail：hanfook@hanfook.com.cn
         res = news_tmp%(self.userid,self.myid,int(time.time()),len(items),items_str) 
         self.finish(res)
 
-    def send_air_pic(self,pm25,msg):
-        pic_url = self.get_shanghai_air_pic()
-        items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://wxtest.oookini.com/egret?from=pm25")]  
+    def send_air_pic(self,items):
+        #pic_url = self.get_shanghai_air_pic()
+        #items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://weixin.xiameiju.net/livepic?city_id=340")]  
         #items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,pic_url)]  
         self.send_news(items)
 
