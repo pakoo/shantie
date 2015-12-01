@@ -14,6 +14,7 @@ import mdb
 
 
 db = mdb.con.air.pm
+db2 = mdb.con.air.pic
 cndb = mdb.con.air.pmcn
 
 
@@ -294,7 +295,7 @@ E-mail：hanfook@hanfook.com.cn
 
     def send_air_pic(self,pm25,msg):
         pic_url = self.get_shanghai_air_pic()
-        items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://www.liuliu.co/download?src=pm25")]  
+        items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://wxtest.oookini.com/egret?from=pm25")]  
         #items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,pic_url)]  
         self.send_news(items)
 
@@ -353,6 +354,15 @@ class www(tornado.web.RequestHandler):
         #loader = tornado.template.Loader("./tufuli/")
         #self.finish(loader.load('base.html').generate({}))
         self.render('tufuli/base.html',mainpage='active')
+
+
+class LiveCityPic(tornado.web.RequestHandler):
+
+    def get(self):
+        city_id = self.get_arugment('city_id')
+        pic_list = db2.find_one({'city_id':city_id},sort=[('create_time',-1)])
+        self.render("air_pic.html",pic_list=pic_list)
+
 
 
 class Application(tornado.web.Application):
