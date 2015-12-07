@@ -416,6 +416,8 @@ def get_all_city_info():
                     'PM10':data['PM10'],
                     'CO':data['CO'],
                     'SO2':data['SO2'],
+                    'rank':data['rank'],
+                    'level':data['level'],
                     'time':data['time']
                     }
                     },
