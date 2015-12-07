@@ -399,13 +399,13 @@ def get_all_city_info():
         td = c.find_all('td')
         print 
         data = {'name':td[1].a.string,'name_py':td[1].a['href'][1:]}
-        data['rank'] = float(td[0].string)
-        data['AQI'] = float(td[2].string)
+        data['rank'] = td[0].string
+        data['AQI'] = td[2].string
         data['level'] = td[3].string
-        data['PM2.5'] = float(td[5].string)
-        data['PM10'] = float(td[6].string)
-        data['CO'] = float(td[7].string)
-        data['SO2'] = float(td[11].string)
+        data['PM2.5'] = td[5].string
+        data['PM10'] = td[6].string
+        data['CO'] = td[7].string
+        data['SO2'] = td[11].string
         data['time'] = now
         print data
         mdb.con['air'].pmcn.update(
