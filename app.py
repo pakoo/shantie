@@ -90,7 +90,7 @@ def get_pm(place):
     if res:
         return res
     else:
-        cndata = cndb.find_one({'location':place},sort=[('create_time',-1)])
+        cndata = cndb.find_one({'name':place})
         if cndata:
             return cndata
 
@@ -218,11 +218,18 @@ class weixin(tornado.web.RequestHandler):
                 ctime = str(res['publish_time'])
                 place = '成都'
             else:
-                res = get_pm(self.wxtext)
+                res = get_pm(self.wxtext.strip())
+                print 'res:',res
                 if res:
-                    pm25 = res['data']
-                    ctime = res['publish_time']
-                    place = self.wxtext
+                    tmp = "城市:%s
+                           \nPM2.5:%s
+                           \nAQI:%s
+                           \nPM10:%s
+                           \nSO2:%s
+                           \nCO:%s"%(res['name'],res['PM25'],res['AQI'],res['PM10'],res['SO2'],res['CO'])
+                    print 'tmp:',tmp
+                    self.send_text(tmp)    
+                    return 
                 else:
                     #a = """发送 “1”查询上海 美国领事馆发布的 pm2.5 数据
                     #     \n发送 “2”查询北京 美国领事馆发布的 pm2.5 数据
