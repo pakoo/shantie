@@ -411,11 +411,11 @@ def get_all_city_info():
         mdb.con['air'].pmcn.update(
                     {'name':data['name']},
                     {'$set':{
-                    'AQI':float(data['AQI']),
-                    'PM2.5':float(data['PM2.5']),
-                    'PM10':float(data['PM10']),
-                    'CO':float(data['CO']),
-                    'SO2':float(data['SO2']),
+                    'AQI':data['AQI'],
+                    'PM2.5':data['PM2.5'],
+                    'PM10':data['PM10'],
+                    'CO':data['CO'],
+                    'SO2':data['SO2'],
                     'time':data['time']
                     }
                     },
