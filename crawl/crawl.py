@@ -412,7 +412,7 @@ def get_all_city_info():
                     {'name':data['name']},
                     {'$set':{
                     'AQI':data['AQI'],
-                    'PM25':data['PM2.5'],
+                    'PM25':data['PM25'],
                     'PM10':data['PM10'],
                     'CO':data['CO'],
                     'SO2':data['SO2'],
