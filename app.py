@@ -229,7 +229,7 @@ class weixin(tornado.web.RequestHandler):
                            \nPM10:%s
                            \nSO2:%s
                            \nCO:%s
-                           """%(res['name'],res['rank']res['level'],res['PM25'],res['AQI'],res['PM10'],res['SO2'],res['CO'])
+                           """%(res['name'],res['rank'],res['level'],res['PM25'],res['AQI'],res['PM10'],res['SO2'],res['CO'])
                     print 'tmp:',tmp
                     self.send_text(tmp)    
                     return 
