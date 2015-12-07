@@ -197,27 +197,7 @@ class weixin(tornado.web.RequestHandler):
     def post(self):
         if self.msgtype == 'text':
             #cndata = 
-            if self.wxtext in ('1','shanghai','上海') :
-                res = get_pm('shanghai')
-                pm25 = res['data']
-                ctime = str(res['publish_time'])
-                place = '上海'
-            elif self.wxtext in ('2','北京','beijing'):
-                res = get_pm('beijing')
-                pm25 = res['data']
-                ctime = str(res['publish_time'])
-                place = '北京'
-            elif self.wxtext in ('3','广州','guangzhou'):
-                res = get_pm('guangzhou')
-                pm25 = res['data']
-                ctime = str(res['publish_time'])
-                place = '广州'
-            elif self.wxtext in ('4','成都','chengdu'):
-                res = get_pm('chengdu')
-                pm25 = res['data']
-                ctime = str(res['publish_time'])
-                place = '成都'
-            elif self.wxtext == '5':
+            if self.wxtext == '5':
                 items = [('title1','description1','http://www.xiameiju.net/static/img/bt.jpg','http://oucena.com/airpic?pm25=18')]  
                 self.send_news(items)
             else:
@@ -245,7 +225,7 @@ class weixin(tornado.web.RequestHandler):
                 items = [('上海PM2.5浓度为:%s.'%pm25,msg,pic_url,"http://weixin.xiameiju.net/livepic?city_id=340")]  
                 self.send_air_pic(items)
             elif self.wxtext  in ('2','beijing','北京'):
-                items = [('北京PM2.5浓度为:%s.'%pm25,msg,res.get('cover',''),"http://weixin.xiameiju.net/livepic?city_id=33")]  
+                items = [('北京PM2.5浓度为:%s.'%pm25,msg,"http://159.226.97.116/getImage?t=1","http://weixin.xiameiju.net/livepic?city_id=33")]  
                 self.send_air_pic(items)
             elif self.wxtext  in ('3','guangzhou',''):
                 items = [('广州PM2.5浓度为:%s.'%pm25,msg,res.get('cover',''),"http://weixin.xiameiju.net/livepic?city_id=126")]  

@@ -13,6 +13,8 @@ import urllib
 import BeautifulSoup as bsoup
 from bs4 import BeautifulSoup as bs4,Tag
 import logging
+import sys
+import requests
 import mdb
 
 mktime=lambda dt:time.mktime(dt.utctimetuple())
@@ -377,29 +379,46 @@ def run_yy():
             continue
             print('\n'*9)
 
-            
-def pm25data():
-    url = "http://www.cnpm25.com/rank/"
-    html = get_html(url)
-    soup = bs4(html)
-    citys = soup.table.find_all('tr')[1].find_all('tr')[2:-2]
-    now =datetime.datetime.now() 
-    for city in citys:
-        tds = city.find_all('td')
-        name = tds[1].text
-        level = tds[3].text
-        pm25 = tds[-1].text
-        print '%s:%s %s'%(name,pm25,level)
+def transtime(stime):
+    """
+    将'11-12-13 11:30'类型的时间转换成datatime
+    """
+    res=stime.split(' ')
+    year,mon,day=[int(i) for i in res[0].split('-')]
+    hour,second=[int(i) for i in res[1].split(':')]
+    data = mktime(datetime.datetime(year,mon,day,hour))
+    return data
+        
+def get_all_city_info():
+    r = requests.get('http://www.pm25.in/')
+    soup = bs4(r.content)
+    citys = soup.find('div','all').find_all('a')
+    today = datetime.datetime.now()
+    now = datetime.datetime(today.year,today.month,today.day,today.hour)
+    for c in citys:
+        data = {'name':c.string,'name_py':c['href'][1:]}
+        data_html = requests.get('http://www.pm25.in'+c['href'])
+        csoup = bs4(data_html.content)
+        datas = csoup.find_all('div','value') 
+        data['AQI'] = datas[0].string.replace('\n','').strip()
+        data['PM2.5'] = datas[1].string.replace('\n','').strip()
+        data['PM10'] = datas[2].string.replace('\n','').strip()
+        data['CO'] = datas[3].string.replace('\n','').strip()
+        data['SO2'] = datas[7].string.replace('\n','').strip()
+        data['time'] = now
+        print data
         mdb.con['air'].pmcn.update(
-                {'location':name},
-                {'$set':{
-                'create_time':time.time(), 
-                'data':int(pm25),
-                'location':name,
-                'publish_time':'%s-%s-%s %s:%s'%(now.year,now.month,now.day,now.hour,now.minute),
-                }
-                },
-                upsert=True)
+                    {'name':data['name']},
+                    {'$set':{
+                    'AQI':float(data['AQI']),
+                    'PM2.5':float(data['PM2.5']),
+                    'PM10':float(data['PM10']),
+                    'CO':float(data['CO']),
+                    'SO2':float(data['SO2']),
+                    'time':data['time']
+                    }
+                    },
+                    upsert=True)
 
 if __name__ == "__main__":
     import json
@@ -408,7 +427,7 @@ if __name__ == "__main__":
     if sys.argv[1] == 'test':
         get_tieba_info()
     elif sys.argv[1] == 'pm25':
-        pm25data()
+        get_all_city_info()
     elif sys.argv[1] == 'liyi':
         import review_open_post
         gfw = GFW()
