@@ -229,7 +229,6 @@ class weixin(tornado.web.RequestHandler):
                            \nPM10:%s
                            \nSO2:%s
                            \nCO:%s
-                           \n排名:%s
                            """%(res['name'],res['level'],res['PM25'],res['AQI'],res['PM10'],res['SO2'],res['CO'],res['rank'])
                     print 'tmp:',tmp
                     self.send_text(tmp)    
