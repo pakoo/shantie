@@ -390,21 +390,22 @@ def transtime(stime):
     return data
         
 def get_all_city_info():
-    r = requests.get('http://www.pm25.in/')
+    r = requests.get('http://www.pm25.in/rank')
     soup = bs4(r.content)
-    citys = soup.find('div','all').find_all('a')
+    citys = soup.find_all('tr')[1:]
     today = datetime.datetime.now()
     now = datetime.datetime(today.year,today.month,today.day,today.hour)
     for c in citys:
-        data = {'name':c.string,'name_py':c['href'][1:]}
-        data_html = requests.get('http://www.pm25.in'+c['href'])
-        csoup = bs4(data_html.content)
-        datas = csoup.find_all('div','value') 
-        data['AQI'] = datas[0].string.replace('\n','').strip()
-        data['PM2.5'] = datas[1].string.replace('\n','').strip()
-        data['PM10'] = datas[2].string.replace('\n','').strip()
-        data['CO'] = datas[3].string.replace('\n','').strip()
-        data['SO2'] = datas[7].string.replace('\n','').strip()
+        td = c.find_all('td')
+        print 
+        data = {'name':td[1].a.string,'name_py':td[1].a['href'][1:]}
+        data['rank'] = float(td[0].string)
+        data['AQI'] = float(td[2].string)
+        data['level'] = td[3].string
+        data['PM2.5'] = float(td[5].string)
+        data['PM10'] = float(td[6].string)
+        data['CO'] = float(td[7].string)
+        data['SO2'] = float(td[11].string)
         data['time'] = now
         print data
         mdb.con['air'].pmcn.update(
