@@ -197,9 +197,26 @@ class weixin(tornado.web.RequestHandler):
     def post(self):
         if self.msgtype == 'text':
             #cndata = 
-            if self.wxtext == '5':
-                items = [('title1','description1','http://www.xiameiju.net/static/img/bt.jpg','http://oucena.com/airpic?pm25=18')]  
-                self.send_news(items)
+            if self.wxtext in ('1','shanghai','上海') :
+                res = get_pm('shanghai')
+                pm25 = res['data']
+                ctime = str(res['publish_time'])
+                place = '上海'
+            elif self.wxtext in ('2','北京','beijing'):
+                res = get_pm('beijing')
+                pm25 = res['data']
+                ctime = str(res['publish_time'])
+                place = '北京'
+            elif self.wxtext in ('3','广州','guangzhou'):
+                res = get_pm('guangzhou')
+                pm25 = res['data']
+                ctime = str(res['publish_time'])
+                place = '广州'
+            elif self.wxtext in ('4','成都','chengdu'):
+                res = get_pm('chengdu')
+                pm25 = res['data']
+                ctime = str(res['publish_time'])
+                place = '成都'
             else:
                 res = get_pm(self.wxtext)
                 if res:
@@ -235,10 +252,6 @@ class weixin(tornado.web.RequestHandler):
                 self.send_air_pic(items)
             else:
                 self.send_text(msg)    
-        elif self.msgtype == 'location':
-            self.send_text('我收到你消息啦!!')
-        elif self.msgtype == 'image':
-            self.send_text('我收到你消息啦!!')
         elif self.msgtype == 'event':
             print 'eventkey:',self.event_key
             if self.event_key == 'about':
