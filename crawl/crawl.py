@@ -402,7 +402,7 @@ def get_all_city_info():
         data['rank'] = td[0].string
         data['AQI'] = td[2].string
         data['level'] = td[3].string
-        data['PM2.5'] = td[5].string
+        data['PM25'] = td[5].string
         data['PM10'] = td[6].string
         data['CO'] = td[7].string
         data['SO2'] = td[11].string
@@ -412,7 +412,7 @@ def get_all_city_info():
                     {'name':data['name']},
                     {'$set':{
                     'AQI':data['AQI'],
-                    'PM2.5':data['PM2.5'],
+                    'PM25':data['PM2.5'],
                     'PM10':data['PM10'],
                     'CO':data['CO'],
                     'SO2':data['SO2'],
