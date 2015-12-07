@@ -221,12 +221,12 @@ class weixin(tornado.web.RequestHandler):
                 res = get_pm(self.wxtext.strip())
                 print 'res:',res
                 if res:
-                    tmp = "城市:%s
+                    tmp = """城市:%s
                            \nPM2.5:%s
                            \nAQI:%s
                            \nPM10:%s
                            \nSO2:%s
-                           \nCO:%s"%(res['name'],res['PM25'],res['AQI'],res['PM10'],res['SO2'],res['CO'])
+                           \nCO:%s"""%(res['name'],res['PM25'],res['AQI'],res['PM10'],res['SO2'],res['CO'])
                     print 'tmp:',tmp
                     self.send_text(tmp)    
                     return 
