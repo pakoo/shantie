@@ -244,7 +244,7 @@ class weixin(tornado.web.RequestHandler):
                     return 
             if 'No' not in  str(pm25):
                 air_level =get_level(int(float(pm25)))  
-                msg = "%s %s PM2.5:%s  %s .点击[阅读原文]查看城市空气实时图片"%(ctime,place,pm25,air_level)
+                msg = "%s  %s .点击[阅读全文]查看城市空气实时图片"%(ctime,air_level)
             else:
                 msg = "暂无数据"
             if self.wxtext  in ('1','shanghai','上海'):
