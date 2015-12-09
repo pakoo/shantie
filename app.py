@@ -222,13 +222,13 @@ class weixin(tornado.web.RequestHandler):
                 print 'res:',res
                 if res:
                     tmp = """城市:%s
-                           排名:%s
-                           空气质量:%s
-                           PM2.5:%s
-                           AQI:%s
-                           PM10:%s
-                           SO2:%s
-                           CO:%s
+排名:%s
+空气质量:%s
+PM2.5:%s
+AQI:%s
+PM10:%s
+SO2:%s
+CO:%s
                            """%(res['name'],res['rank'],res['level'],res['PM25'],res['AQI'],res['PM10'],res['SO2'],res['CO'])
                     print 'tmp:',tmp
                     self.send_text(tmp)    
