@@ -252,7 +252,7 @@ CO:%s
                 items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://weixin.xiameiju.net/livepic?city_id=340")]  
                 self.send_air_pic(items)
             elif self.wxtext  in ('2','beijing','北京'):
-                items = [('北京PM2.5浓度为:%s'%pm25,msg,"http://159.226.97.116/getImage?t=1","http://weixin.xiameiju.net/livepic?city_id=33")]  
+                items = [('北京PM2.5浓度为:%s'%pm25,msg,res.get('cover',''),"http://weixin.xiameiju.net/livepic?city_id=33")]  
                 self.send_air_pic(items)
             elif self.wxtext  in ('3','guangzhou',''):
                 items = [('广州PM2.5浓度为:%s'%pm25,msg,res.get('cover',''),"http://weixin.xiameiju.net/livepic?city_id=126")]  
