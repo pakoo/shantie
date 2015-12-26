@@ -204,21 +204,21 @@ class weixin(tornado.web.RequestHandler):
                 ctime = str(res['publish_time'])
                 place = '上海'
                 con.user_query.update({'user_id':self.userid,'city':place},{'$inc':{'count':1},'$set':{'last_query_time':time.time()}},upsert=True)
-                con.query_rank.update({'city':place},{'$inc':{'count':1}},upsert=True)
+                con.query_rank.update({'city':place},{'$inc':{'count':1},'$set':{'last_query_time':time.time()}},upsert=True)
             elif self.wxtext in ('2','北京','beijing'):
                 res = get_pm('beijing')
                 pm25 = res['data']
                 ctime = str(res['publish_time'])
                 place = '北京'
                 con.user_query.update({'user_id':self.userid,'city':place},{'$inc':{'count':1},'$set':{'last_query_time':time.time()}},upsert=True)
-                con.query_rank.update({'city':place},{'$inc':{'count':1}},upsert=True)
+                con.query_rank.update({'city':place},{'$inc':{'count':1},'$set':{'last_query_time':time.time()}},upsert=True)
             elif self.wxtext in ('3','广州','guangzhou'):
                 res = get_pm('guangzhou')
                 pm25 = res['data']
                 ctime = str(res['publish_time'])
                 place = '广州'
                 con.user_query.update({'user_id':self.userid,'city':place},{'$inc':{'count':1},'$set':{'last_query_time':time.time()}},upsert=True)
-                con.query_rank.update({'city':place},{'$inc':{'count':1}},upsert=True)
+                con.query_rank.update({'city':place},{'$inc':{'count':1},'$set':{'last_query_time':time.time()}},upsert=True)
             elif self.wxtext in ('4','成都','chengdu'):
                 res = get_pm('chengdu')
                 pm25 = res['data']
@@ -242,7 +242,7 @@ CO:%s
                     print 'tmp:',tmp
                     self.send_text(tmp)
                     con.user_query.update({'user_id':self.userid,'city':res['name']},{'$inc':{'count':1},'$set':{'last_query_time':time.time()}},upsert=True)
-                    con.query_rank.update({'city':res['name']},{'$inc':{'count':1}},upsert=True)
+                    con.query_rank.update({'city':res['name']},{'$inc':{'count':1},'$set':{'last_query_time':time.time()}},upsert=True)
                     return 
                 else:
                     #a = """发送 “1”查询上海 美国领事馆发布的 pm2.5 数据
