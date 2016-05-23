@@ -260,16 +260,16 @@ CO:%s
                 msg = "暂无数据"
             if self.wxtext  in ('1','shanghai','上海'):
                 pic_url = self.get_shanghai_air_pic()
-                items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://weixin.xiameiju.net/livepic?city_id=340&from=%s"%self.userid),('权利的游戏第六季第五集','https://mmbiz.qlogo.cn/mmbiz/jvxcKkjRYZ13aicXKc29ZEicR5whufLcWQgxyzyRyIEicZbUOiauIeTAgYemIpFWmgabvhPKthObh7APq9lVXDBYzQ/0?wx_fmt=jpeg','http://mp.weixin.qq.com/s?__biz=MjM5MDcyNjgyMA==&mid=505897770&idx=1&sn=253e2247be579b1f598e47d21ed9d9d7#rd')]  
+                items = [('上海PM2.5浓度为:%s'%pm25,msg,pic_url,"http://weixin.xiameiju.net/livepic?city_id=340&from=%s"%self.userid),('权利的游戏第六季第五集','','https://mmbiz.qlogo.cn/mmbiz/jvxcKkjRYZ13aicXKc29ZEicR5whufLcWQgxyzyRyIEicZbUOiauIeTAgYemIpFWmgabvhPKthObh7APq9lVXDBYzQ/0?wx_fmt=jpeg','http://mp.weixin.qq.com/s?__biz=MjM5MDcyNjgyMA==&mid=505897770&idx=1&sn=253e2247be579b1f598e47d21ed9d9d7#rd')]  
                 self.send_air_pic(items)
             elif self.wxtext  in ('2','beijing','北京'):
-                items = [('北京PM2.5浓度为:%s'%pm25,msg,res.get('cover',''),"http://weixin.xiameiju.net/livepic?city_id=33&from=%s"%self.userid),('权利的游戏第六季第五集','https://mmbiz.qlogo.cn/mmbiz/jvxcKkjRYZ13aicXKc29ZEicR5whufLcWQgxyzyRyIEicZbUOiauIeTAgYemIpFWmgabvhPKthObh7APq9lVXDBYzQ/0?wx_fmt=jpeg','http://mp.weixin.qq.com/s?__biz=MjM5MDcyNjgyMA==&mid=505897770&idx=1&sn=253e2247be579b1f598e47d21ed9d9d7#rd')]  
+                items = [('北京PM2.5浓度为:%s'%pm25,msg,res.get('cover',''),"http://weixin.xiameiju.net/livepic?city_id=33&from=%s"%self.userid),('权利的游戏第六季第五集','','https://mmbiz.qlogo.cn/mmbiz/jvxcKkjRYZ13aicXKc29ZEicR5whufLcWQgxyzyRyIEicZbUOiauIeTAgYemIpFWmgabvhPKthObh7APq9lVXDBYzQ/0?wx_fmt=jpeg','http://mp.weixin.qq.com/s?__biz=MjM5MDcyNjgyMA==&mid=505897770&idx=1&sn=253e2247be579b1f598e47d21ed9d9d7#rd')]  
                 self.send_air_pic(items)
             elif self.wxtext  in ('3','guangzhou',''):
-                items = [('广州PM2.5浓度为:%s'%pm25,msg,res.get('cover',''),"http://weixin.xiameiju.net/livepic?city_id=126&from=%s"%self.userid),('权利的游戏第六季第五集','https://mmbiz.qlogo.cn/mmbiz/jvxcKkjRYZ13aicXKc29ZEicR5whufLcWQgxyzyRyIEicZbUOiauIeTAgYemIpFWmgabvhPKthObh7APq9lVXDBYzQ/0?wx_fmt=jpeg','http://mp.weixin.qq.com/s?__biz=MjM5MDcyNjgyMA==&mid=505897770&idx=1&sn=253e2247be579b1f598e47d21ed9d9d7#rd')]  
+                items = [('广州PM2.5浓度为:%s'%pm25,msg,res.get('cover',''),"http://weixin.xiameiju.net/livepic?city_id=126&from=%s"%self.userid),('权利的游戏第六季第五集','','https://mmbiz.qlogo.cn/mmbiz/jvxcKkjRYZ13aicXKc29ZEicR5whufLcWQgxyzyRyIEicZbUOiauIeTAgYemIpFWmgabvhPKthObh7APq9lVXDBYzQ/0?wx_fmt=jpeg','http://mp.weixin.qq.com/s?__biz=MjM5MDcyNjgyMA==&mid=505897770&idx=1&sn=253e2247be579b1f598e47d21ed9d9d7#rd')]  
                 self.send_air_pic(items)
             elif self.wxtext  in ('4','chengdu','成都'):
-                items = [('成都PM2.5浓度为:%s'%pm25,msg,res.get('cover',''),"http://weixin.xiameiju.net/livepic?city_id=53&from=%s"%self.userid),('权利的游戏第六季第五集','https://mmbiz.qlogo.cn/mmbiz/jvxcKkjRYZ13aicXKc29ZEicR5whufLcWQgxyzyRyIEicZbUOiauIeTAgYemIpFWmgabvhPKthObh7APq9lVXDBYzQ/0?wx_fmt=jpeg','http://mp.weixin.qq.com/s?__biz=MjM5MDcyNjgyMA==&mid=505897770&idx=1&sn=253e2247be579b1f598e47d21ed9d9d7#rd')]  
+                items = [('成都PM2.5浓度为:%s'%pm25,msg,res.get('cover',''),"http://weixin.xiameiju.net/livepic?city_id=53&from=%s"%self.userid),('权利的游戏第六季第五集','','https://mmbiz.qlogo.cn/mmbiz/jvxcKkjRYZ13aicXKc29ZEicR5whufLcWQgxyzyRyIEicZbUOiauIeTAgYemIpFWmgabvhPKthObh7APq9lVXDBYzQ/0?wx_fmt=jpeg','http://mp.weixin.qq.com/s?__biz=MjM5MDcyNjgyMA==&mid=505897770&idx=1&sn=253e2247be579b1f598e47d21ed9d9d7#rd')]  
                 self.send_air_pic(items)
             else:
                 self.send_text(msg)    
