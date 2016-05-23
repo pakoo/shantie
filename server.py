@@ -466,7 +466,8 @@ class Application(tornado.web.Application):
         self.manager_handlers = [
                 ]
         handlers = [
-            (r'/',Index),
+            (r"/", app.weixin),
+            (r'/index',Index),
             (r'/post/tieba',Post),
             (r'/liyi/post/([0-9]+)/?',OldPostUrl),
             (r'/tieba/post/([0-9]+)/?',OldPostUrl),
