@@ -11,6 +11,7 @@ import pymongo
 from datetime import datetime
 import requests
 import mdb
+import json
 
 
 db = mdb.con.air.pm
@@ -95,6 +96,15 @@ def get_pm(place):
         if cndata:
             return cndata
 
+def get_mlg_pm():
+    shanghai = db.find_one({'location':'shanghai'},sort=[('create_time',-1)])    
+    beijing = db.find_one({'location':'beijing'},sort=[('create_time',-1)])    
+    guangzhou = db.find_one({'location':'guangzhou'},sort=[('create_time',-1)])    
+    chengdu = db.find_one({'location':'chengdu'},sort=[('create_time',-1)])    
+    res = tools.dumps([shanghai,beijing,guangzhou,chengdu])
+    return res
+
+
 
 def get_level(data):
     if 0<= data <=50:
@@ -152,6 +162,12 @@ def update_menu():
                 ]
     }
 
+
+class mina25(tornado.web.RequestHandler):
+    def get(self):
+        self.set_header("Content-Type", "application/text; charset=UTF-8")
+        res = get_mlg_pm()
+        self.finish(res)
 
 class weixin(tornado.web.RequestHandler):
 
@@ -398,6 +414,7 @@ class Application(tornado.web.Application):
         }
         handlers = [
             (r'/',weixin),
+            (r'/mina25',mina25),
             (r'/livepic',LiveCityPic),
             (r'/static/(.*)', tornado.web.StaticFileHandler, {"path": "./static"}),
         ]

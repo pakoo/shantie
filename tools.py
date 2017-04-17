@@ -22,6 +22,7 @@ import traceback
 import string
 from utils.chars import *
 import mdb
+from bson.objectid import ObjectId
 
 
 current_path = os.path.split(os.path.realpath(__file__))[0]
@@ -36,7 +37,12 @@ headers = {
 
 mktime=lambda dt:time.mktime(dt.utctimetuple())
 
-
+class mdump(JSONEncoder):
+    def default(self, obj, **kwargs):
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        else:
+            return JSONEncoder.default(obj, **kwargs)
 
 def get_html(url,referer ='',verbose=False,protocol='http'):
     if not url.startswith(protocol):
