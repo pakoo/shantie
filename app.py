@@ -102,6 +102,7 @@ def get_mlg_pm():
     beijing = db.find_one({'location':'beijing'},sort=[('create_time',-1)])    
     guangzhou = db.find_one({'location':'guangzhou'},sort=[('create_time',-1)])    
     chengdu = db.find_one({'location':'chengdu'},sort=[('create_time',-1)])    
+    print 'res:',shanghai
     res = tools.dumps([shanghai,beijing,guangzhou,chengdu])
     return res
 
@@ -166,7 +167,7 @@ def update_menu():
 
 class mina25(tornado.web.RequestHandler):
     def get(self):
-        self.set_header("Content-Type", "application/text; charset=UTF-8")
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
         res = get_mlg_pm()
         self.finish(res)
 
