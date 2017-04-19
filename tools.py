@@ -44,6 +44,13 @@ class mdump(JSONEncoder):
         else:
             return JSONEncoder.default(obj, **kwargs)
 
+def dumps(data):
+    """
+    json dumps
+    """
+    res = json.dumps(data,cls=mdump)
+    return res
+
 def get_html(url,referer ='',verbose=False,protocol='http'):
     if not url.startswith(protocol):
         url = protocol+'://'+url
