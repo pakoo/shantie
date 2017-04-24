@@ -23,6 +23,7 @@ import string
 from utils.chars import *
 import mdb
 from bson.objectid import ObjectId
+from datetime import datetime,timedelta
 
 
 current_path = os.path.split(os.path.realpath(__file__))[0]
@@ -40,6 +41,8 @@ mktime=lambda dt:time.mktime(dt.utctimetuple())
 class mdump(JSONEncoder):
     def default(self, obj, **kwargs):
         if isinstance(obj, ObjectId):
+            return str(obj)
+        elif isinstance(obj, datetime):
             return str(obj)
         else:
             return JSONEncoder.default(obj, **kwargs)
