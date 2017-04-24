@@ -103,9 +103,13 @@ def get_mlg_pm():
     guangzhou = db.find_one({'location':'guangzhou'},sort=[('create_time',-1)])    
     chengdu = db.find_one({'location':'chengdu'},sort=[('create_time',-1)])    
     shanghai['location'] = u'上海'
+    shanghai['level'] = get_level2(int(shanghai.get('data','暂无数据')))
     beijing['location'] = u'北京'
+    beijing['level'] = get_level2(int(beijing.get('data','暂无数据')))
     guangzhou['location'] = u'广州'
+    guangzhou['level'] = get_level2(int(guangzhou.get('data','暂无数据')))
     chengdu['location'] = u'成都'
+    chengdu['level'] = get_level2(int(chengdu.get('data','暂无数据')))
     res = tools.dumps([shanghai,beijing,guangzhou,chengdu])
     return res
 
@@ -124,6 +128,20 @@ def get_level(data):
         return "空气状况:重度污染,建议不外出"
     else:
         return "空气状况:严重污染,建议不外出"
+
+def get_level2(data):
+    if 0<= data <=50:
+        return "优"
+    elif 51<= data <=100: 
+        return "良"
+    elif 101<= data <=150: 
+        return "轻度污染,建议佩戴口罩"
+    elif 151<= data <=200: 
+        return "中度污染,建议佩戴口罩"
+    elif 201<= data <=300: 
+        return "重度污染,建议不外出"
+    else:
+        return "严重污染,建议不外出"
 
 def update_menu():
     """
