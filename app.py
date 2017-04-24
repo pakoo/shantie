@@ -102,6 +102,10 @@ def get_mlg_pm():
     beijing = db.find_one({'location':'beijing'},sort=[('create_time',-1)])    
     guangzhou = db.find_one({'location':'guangzhou'},sort=[('create_time',-1)])    
     chengdu = db.find_one({'location':'chengdu'},sort=[('create_time',-1)])    
+    shanghai['location'] = u'上海'
+    beijing['location'] = u'北京'
+    guangzhou['location'] = u'广州'
+    chengdu['location'] = u'成都'
     res = tools.dumps([shanghai,beijing,guangzhou,chengdu])
     return res
 
